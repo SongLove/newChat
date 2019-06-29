@@ -1,0 +1,209 @@
+@import "./mixins.scss";
+
+// for swiper https://github.com/surmon-china/vue-awesome-swiper/issues/423#issuecomment-442808684
+// html {
+//   touch-action: none;
+// }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+// flex
+.flex {
+  display: flex;
+  &.dir-col {
+    flex-direction: column;
+  }
+  // 垂直居中
+  &.ac {
+    align-items: center;
+  }
+  &.ae {
+    align-items: flex-end;
+  }
+  // 水平居中
+  &.jc {
+    justify-content: center;
+  }
+  &.jb {
+    justify-content: space-between;
+  }
+  &.je {
+    justify-content: flex-end;
+  }
+  // 居底部
+  &.as {
+    align-self: flex-end;
+  }
+}
+
+[v-cloak] {
+  display: none;
+}
+// 百分百大小
+.full-size {
+  width: 100%;
+  height: 100%;
+}
+.full-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+// margin center
+.m-auto {
+  margin: 0 auto;
+}
+
+// font bold;
+.text-bold {
+  font-weight: bold;
+}
+
+// text center
+.text-c {
+  text-align: center;
+}
+// text left
+.text-l {
+  text-align: left;
+}
+// text right
+.text-r {
+  text-align: right;
+}
+
+// position relative/absolute
+.p-re {
+  position: relative;
+}
+.p-ab {
+  position: absolute;
+}
+.p-f {
+  position: fixed;
+}
+
+// inline-block
+.block-i {
+  display: inline-block;
+}
+// block
+.block {
+  display: block;
+}
+
+// overflow hidden
+.overflow {
+  overflow: hidden;
+}
+
+// float right
+.float-r {
+  float: right;
+}
+
+.clearboth {
+  clear: both;
+}
+
+// clearfix
+.clearfix:after {
+  content: ".";
+  display: table;
+  height: 0;
+  clear: both;
+}
+
+.border-box {
+  box-sizing: border-box;
+}
+
+.content {
+  flex: 1;
+}
+
+.ui {
+  &-input {
+    background-color: transparent;
+    box-sizing: border-box;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  &-button {
+    user-select: none;
+    padding: 0 15px;
+    color: #323233;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+// translateX-center
+.translateX-c {
+  transform: translateX(-50%);
+  left: 50%;
+}
+.translateY-c {
+  transform: translateY(-50%);
+  top: 50%;
+}
+.translate-c {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.font-white {
+  color: #fff;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  outline: none;
+  top: 58% !important;
+  width: 90px !important;
+  height: 72px !important;
+  background-size: cover !important;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.no-after {
+  &::after {
+    display: none;
+  }
+}
+/* cell-item */
+.cell-item {
+  &--green {
+    border-radius: 6px;
+    padding: 10px;
+    background: $green;
+    border: 2px solid transparent;
+    &.active {
+      border-color: $greenDeep;
+      background-color: $greenActive;
+    }
+    & + .cell-item--green {
+      margin-top: 5px;
+    }
+  }
+}
+
+// 文字省略号
+.ellipsis {
+  @include textEllipsis();
+}
+// 2行省略号
+.ellipsis2 {
+  @include textEllipsis(2);
+}
