@@ -1,6 +1,7 @@
 import config from '../config'
 import { Toast } from 'vant'
 import EventEmitter from 'mitt'
+import io from 'socket.io-client'
 
 if (!('WebSocket' in window)) {
   alert('浏览器版本过低，请升级')
@@ -32,7 +33,6 @@ class Socket {
 
     // 上次loading时间
     // this.lastTime = 0
-    //this.init()
   }
 
   /**
@@ -45,16 +45,16 @@ class Socket {
     console.log('initwebsocket')
 
     // 清除心跳定时器
-    // this._timer && clearInterval(this._timer)
+    this._timer && clearInterval(this._timer)
 
     // 建立连接
-    this._socket = new WebSocket(config.socketUrl)
+    this._socket = io(config.socketUrl)
 
     // for events
-    this._socket.onmessage = this.onmessage.bind(this)
-    this._socket.onopen = this.onOpen.bind(this)
-    this._socket.onerror = this.onError.bind(this)
-    this._socket.onclose = this.onClose.bind(this)
+    this._socket.on('connect', this.onOpen.bind(this))
+    this._socket.on('disconnect', this.onError.bind(this))
+    this._socket.on('error', this.onError.bind(this))
+    this._socket.on('message', this.onmessage.bind(this))
 
     // toast tips
     Toast.loading({
@@ -72,9 +72,9 @@ class Socket {
     Toast.clear()
 
     // 发送心跳包
-    // this._timer = setInterval(() => {
-    //   this.send(1)
-    // }, config.hearBeat * 1000)
+    this._timer = setInterval(() => {
+      this.send(1)
+    }, config.hearBeat * 1000)
   }
 
   /**
@@ -87,7 +87,7 @@ class Socket {
       if (msg === 1) {
         this._socket.send(1)
       } else {
-        this._socket.send(JSON.stringify(msg))
+        this._socket.emit(msg.cmd, msg.param)
         // if (now - this.lastTime > 700) {
         //   Toast.loading({ duration: 0 })
         // }
@@ -102,17 +102,18 @@ class Socket {
    */
   onmessage(e) {
     // Toast.clear()
-    let message = JSON.parse(e.data)
+    let message = e
     console.group('from server msg')
     console.log(message)
     console.groupEnd('from server msg')
     if (message === 2) return
     let { cmd, data, code, msg } = message
-    if (code !== 0 && msg) {
+    if (code !== 200 && msg) {
       Toast(msg)
       return
     }
     // fire an event
+    console.log(cmd)
     this.emit(cmd, { data, msg })
   }
 

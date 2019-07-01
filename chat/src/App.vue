@@ -18,7 +18,7 @@ export default {
     footerTab
   },
   beforeCreate () {
-    //Socket.Instance.init()
+    Socket.Instance.init()
   }
 }
 </script>

@@ -13,13 +13,32 @@
           @click-right-icon="$toast('question')"
         />
 
-        <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required/>
-        <van-button @click="sendLogin" :loading="loading" type="primary" loading-text="登录中...">
-          登  录
-        </van-button>
+        <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required />
+        <van-button @click="sendLogin" :loading="loading" type="primary" loading-text="登录中...">登 录</van-button>
       </van-cell-group>
       <!-- 注册 -->
-      <div>注册</div>
+      <div>
+        注册
+        <van-cell-group>
+          <van-field
+            v-model="username"
+            required
+            clearable
+            label="用户名"
+            right-icon="question-o"
+            placeholder="请输入用户名"
+            @click-right-icon="$toast('question')"
+          />
+
+          <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" required />
+          <van-button
+            @click="sendRegister"
+            :loading="loading"
+            type="primary"
+            loading-text="注册中..."
+          >注 册</van-button>
+        </van-cell-group>
+      </div>
     </div>
   </transition>
 </template>
@@ -27,26 +46,50 @@
 import Socket from '../../utils/socket'
 export default {
   name: 'login',
-  data () {
+  data() {
     return {
       username: '',
       password: '',
       loading: false
     }
   },
-  created () {
+  created() {
     Socket.Instance.on('login', this.login)
+    Socket.Instance.on('register', this.login)
   },
   methods: {
-    login({data}) {
+    login({ data, msg }) {
       console.log(data, '登录')
+      if (data) {
+        this.$toast.success({
+          message: msg,
+          duration: 1000,
+          onClose: () => {
+            this.$router.push({path: '/mypage'})
+          }
+        })
+      }
+    },
+    register({ data }) {
+      console.log(data, '注册')
+      this.sendLogin()
+    },
+    sendRegister() {
+      Socket.Instance.send({
+        cmd: 'register',
+        param: {
+          user_name: this.username,
+          pass_word: this.password
+        }
+      })
     },
     sendLogin() {
-      console.log('发送')
       Socket.Instance.send({
         cmd: 'login',
-        user_name: this.username,
-        pass_word: this.password
+        param: {
+          user_name: this.username,
+          pass_word: this.password
+        }
       })
     }
   }

@@ -8,6 +8,8 @@ import 'vant/lib/index.css'
 import './assets/styles/index.scss'
 import './assets/iconFonts/iconfont.css'
 import { setRem } from './utils/rem.js'
+import axios from './api'
+Vue.use(axios)
 
 Vue.config.productionTip = false
 Vue.use(Vant)

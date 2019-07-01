@@ -9,18 +9,18 @@ module.exports = {
     port: 8888, // 端口号
     host: 'localhost',
     https: false,
-    open: false // 配置是否自动启动浏览器
+    open: false, // 配置是否自动启动浏览器
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3300/', //对应自己的接口
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
-  // proxy: {
-  //   '/api': {
-  //     target: 'http://127.0.0.1:8100/', //对应自己的接口
-  //     changeOrigin: true,
-  //     ws: true,
-  //     pathRewrite: {
-  //       '^/api': ''
-  //     }
-  //   }
-  // },
   chainWebpack: config => {
     config.resolve.alias
       .set('components', resolve('src/components')) // key,value自行定义，比如.set('@@', resolve('src/components'))
