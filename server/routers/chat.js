@@ -58,9 +58,10 @@ router.post('/chatwith', async (ctx, next) => {
           }
         })
       }
+      ctx.response.body = responseData
+      console.log('ctx.response.body', ctx.response.body)
     })
   })
-  ctx.response.body = responseData
 })
 router.get('/mock', async (ctx, next) => {
   console.log('mock', ctx.query)
