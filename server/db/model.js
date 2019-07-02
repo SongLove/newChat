@@ -1,6 +1,7 @@
 const mongoose = require('./mongoose')
 const Schema = mongoose.Schema
 
+// 用户
 const userSchema = new Schema({
   user_name: String,
   pass_word: String,
@@ -14,6 +15,8 @@ const userSchema = new Schema({
   }
 })
 
+
+// 聊天内容
 const chatContentSchema = new Schema({
   // 接收者
   user_id: {
@@ -21,8 +24,9 @@ const chatContentSchema = new Schema({
     ref: 'user'
   },
   // 发送者
-  chatWith: {
-    type: Schema.Types.ObjectId
+  chatwith_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
   },
   addTime: {
     type: Date,
@@ -39,18 +43,40 @@ const chatContentSchema = new Schema({
   }
 })
 
+// 存放每个用户的socket id
 const idtodiSchema = new Schema({
   user_name: String,
   socket_id: String
 })
 
+// 存放用户之间的聊天记录
+const chatRelationScheme = new Schema({
+  // 当前用户
+  userA: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  userB: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  chatContent: [{
+    type: Schema.Types.ObjectId,
+    ref: 'chatcontent'
+  }]
+})
+
 const userModel = mongoose.model('user', userSchema)
 const idtoidModel = mongoose.model('idtoid', idtodiSchema)
+const chatContentModel = mongoose.model('chatcontent', chatContentSchema)
+const chatRelationModel = mongoose.model('chatrelation', chatRelationScheme)
 
 
 const modelS = {
   user: userModel,
-  idtoid: idtoidModel
+  idtoid: idtoidModel,
+  chatcontent: chatContentModel,
+  chatrelation: chatRelationModel
 }
 
 module.exports = modelS

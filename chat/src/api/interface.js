@@ -23,9 +23,19 @@ export const mock = params => {
   })
 }
 
+export const sendUserInfo = params => {
+  return axios({
+    url: '/profile/userinfo',
+    method: 'get',
+    params
+  })
+}
+
+
 // 默认全部倒出
 // 根绝需要进行  
 export default {
   sendMessage,
-  mock
+  mock,
+  sendUserInfo
 }

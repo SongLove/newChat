@@ -44,6 +44,7 @@
 </template>
 <script>
 import Socket from '../../utils/socket'
+import { mapMutations } from 'vuex'
 export default {
   name: 'login',
   data() {
@@ -58,14 +59,19 @@ export default {
     Socket.Instance.on('register', this.login)
   },
   methods: {
+    ...mapMutations([
+      'set_userInfo'
+    ]),
     login({ data, msg }) {
       console.log(data, '登录')
       if (data) {
+        this.set_userInfo(data)
+        localStorage.setItem('USERINFO', JSON.stringify(data))
         this.$toast.success({
           message: msg,
           duration: 1000,
           onClose: () => {
-            this.$router.push({path: '/mypage'})
+            this.$router.push({ path: '/mypage' })
           }
         })
       }

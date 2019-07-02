@@ -3,16 +3,16 @@ const Koa = require('koa')
 const config = require('./config')
 const ModelDB = require('./db')
 const app = new Koa()
-const router  = require('koa-router')()
+const router = require('koa-router')()
 const server = require('http').createServer(app.callback())
 const socketHandler = require('./socket')
+const bodyParser = require('koa-bodyparser')// 处理post请求，把 koa2 上下文的表单数据解析到
 
 
 // 划分模块
 
 router.use('/chat', require('./routers/chat'))
-
-app.use(router.routes()).use(router.allowedMethods())
+router.use('/profile', require('./routers/profile'))
 
 
 const io = require('socket.io')(server)
@@ -20,7 +20,7 @@ const io = require('socket.io')(server)
 io.on('connection', socket => {
   console.log('socket 连接成功')
   // 监听用户登录
-
+  const socket_id = socket.id
   socket.on('login', async (obj) => {
     let { user_name } = obj
     let data = await new ModelDB('user').query({ user_name })
@@ -33,7 +33,7 @@ io.on('connection', socket => {
         msg: '账户不存在'
       })
     } else {
-      const socket_id = socket.id
+      console.log('login socketid', socket.id)
       await socketHandler.saveUserSocketId(user_name, socket_id)
       let data2 = await new ModelDB('user').query(obj)
       socket.emit('message', {
@@ -71,11 +71,33 @@ io.on('connection', socket => {
   })
 
   // 监听用户发送的消息
-  socket.on('chat', async(obj) =>{
-
+  socket.on('chat', async (obj) => {
+    console.log('socket chat: ' + JSON.stringify(obj))
+    let { from_user, to_user, messge, addTime, avater, _id } = obj
+    let Idtoid = new ModelDB('idtoid')
+    Idtoid.query({
+      user_name: to_user
+    }).then(res => {
+      // 向对方推送发送的消息
+      console.log('to socket_id: ', res.socket_id)
+      io.to(res.socket_id).emit('message', {
+        cmd: 'receiveMsg',
+        code: 200,
+        data: {
+          from_user,
+          messge,
+          addTime,
+          avater,
+          _id
+        },
+        msg: `${from_user} 发过来的消息`
+      })
+    })
   })
 })
 
+app.use(bodyParser())
+app.use(router.routes()).use(router.allowedMethods())
 
 server.listen(3300, () => {
   console.log('server listenIng on port: ' + config.serverUrl)

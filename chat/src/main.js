@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import *as Vant from 'vant'
 import { Toast } from 'vant'
+import store from './store'
 import 'minireset.css'
 import 'vant/lib/index.css'
 import './assets/styles/index.scss'
@@ -19,5 +20,6 @@ Vue.use(Toast)
 setRem(document, window)
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')

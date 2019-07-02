@@ -72,9 +72,9 @@ class Socket {
     Toast.clear()
 
     // 发送心跳包
-    this._timer = setInterval(() => {
-      this.send(1)
-    }, config.hearBeat * 1000)
+    // this._timer = setInterval(() => {
+    //   this.send(1)
+    // }, config.hearBeat * 1000)
   }
 
   /**
