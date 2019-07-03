@@ -1,7 +1,11 @@
 <template>
   <div class="head-tab flex ac jc jb">
     <div>
-      <i class="iconfont icon-fanhui" v-if="back" @click="$router.go(-1)"></i>
+      <i
+        class="iconfont icon-fanhui"
+        v-if="back"
+        @click="$emit('back')"
+      ></i>
     </div>
     <div class="head-tab-title">{{title}}</div>
     <div>
@@ -11,18 +15,18 @@
 </template>
 <script>
 export default {
-  name: 'headtab',
+  name: "headtab",
   props: {
     title: {
       type: String,
-      default: '标题'
+      default: "标题"
     },
     back: {
       type: Boolean,
       default: false
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .head-tab {

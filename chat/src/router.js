@@ -20,7 +20,7 @@ let router = new VueRouter({
     { path: '/search', name: Search.name, component: Search },
     { path: '/mypage', name: MyPage.name, component: MyPage },
     { path: '/login', name: Login.name, component: Login },
-    { path: '/chat', name: Chat.name, component: Chat, meta: { fade: true } }
+    { path: '/chat', name: Chat.name, component: Chat }
   ]
 })
 
