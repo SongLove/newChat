@@ -50,7 +50,7 @@ const idtodiSchema = new Schema({
 })
 
 // 存放用户之间的聊天记录
-const chatRelationScheme = new Schema({
+const chatRelationSchema = new Schema({
   // 当前用户
   userA: {
     type: Schema.Types.ObjectId,
@@ -69,7 +69,7 @@ const chatRelationScheme = new Schema({
 const userModel = mongoose.model('user', userSchema)
 const idtoidModel = mongoose.model('idtoid', idtodiSchema)
 const chatContentModel = mongoose.model('chatcontent', chatContentSchema)
-const chatRelationModel = mongoose.model('chatrelation', chatRelationScheme)
+const chatRelationModel = mongoose.model('chatrelation', chatRelationSchema)
 
 
 const modelS = {

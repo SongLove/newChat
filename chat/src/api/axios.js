@@ -147,7 +147,6 @@ export default function $axios(options) {
     //请求处理
     instance(options)
       .then((res) => {
-        console.log(res)
         let { data, code, msg } = typeof res === 'object' && res ? res : JSON.parse(res)
         resolve({ data, code, msg })
         return false

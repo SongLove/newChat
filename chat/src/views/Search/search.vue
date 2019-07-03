@@ -1,5 +1,7 @@
 <template>
-  <div>search</div>  
+  <div>
+    <head-tab title="搜索" />
+  </div>
 </template>
 
 <script>
@@ -9,6 +11,5 @@ export default {
 </script>
 
 <style>
-
 </style>
 

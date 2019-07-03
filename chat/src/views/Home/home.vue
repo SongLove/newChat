@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <head-tab title="home"/>
     <i class="iconfont icon-dianzan"></i>
   </div>
 </template>

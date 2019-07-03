@@ -1,15 +1,19 @@
 <template>
   <div class="mypage">
+    <head-tab title="我" />
     <!-- 未登陆 -->
     <div class="nologin text-c">
-      <img src="../../assets/logo.png">
+      <img src="../../assets/logo.png" />
       <div>
         <p>您还没有登录</p>
-        <p>请先<router-link tag="span" to="/login">登录</router-link></p>
+        <p>
+          请先
+          <router-link tag="span" to="/login">登录</router-link>
+        </p>
       </div>
     </div>
     <!-- 已登陆 -->
-  </div>  
+  </div>
 </template>
 
 <script>
@@ -19,9 +23,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.mypage{
-  .nologin{
-    
+.mypage {
+  .nologin {
   }
 }
 </style>

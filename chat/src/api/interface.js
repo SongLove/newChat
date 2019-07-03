@@ -5,7 +5,7 @@ import axios from './axios' // 倒入 api
  * 此处的数据依然来自 Easy Mock
  */
 
-// 单独倒出
+// 单独发送聊天记录
 export const sendMessage = data => {
   console.log(data)
   return axios({
@@ -23,6 +23,25 @@ export const mock = params => {
   })
 }
 
+// 查找当前用户与其用户的聊天记录
+export const sendChatRecord = params => {
+  return axios({
+    url: '/chat/chatrecord',
+    method: 'get',
+    params
+  })
+}
+
+// 查找当前用户的聊天列表
+export const sendChatList = params => {
+  return axios({
+    url: '/chat/chatlist',
+    method: 'get',
+    params
+  })
+}
+
+// 用户信息
 export const sendUserInfo = params => {
   return axios({
     url: '/profile/userinfo',
@@ -37,5 +56,7 @@ export const sendUserInfo = params => {
 export default {
   sendMessage,
   mock,
-  sendUserInfo
+  sendUserInfo,
+  sendChatRecord,
+  sendChatList
 }

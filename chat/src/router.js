@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home/home.vue'
 import NewsChat from './views/NewsChat/newsChat.vue'
+import Chat from './views/NewsChat/chat.vue'
 import Upload from './views/Upload/upload.vue'
 import Search from './views/Search/search.vue'
 import MyPage from './views/MyPage/myPage.vue'
@@ -18,7 +19,8 @@ let router = new VueRouter({
     { path: '/upload', name: Upload.name, component: Upload },
     { path: '/search', name: Search.name, component: Search },
     { path: '/mypage', name: MyPage.name, component: MyPage },
-    { path: '/login', name: Login.name, component: Login }
+    { path: '/login', name: Login.name, component: Login },
+    { path: '/chat', name: Chat.name, component: Chat, meta: { fade: true } }
   ]
 })
 

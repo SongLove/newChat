@@ -17,6 +17,9 @@ body {
   &.dir-col {
     flex-direction: column;
   }
+  &.dir-r {
+    flex-direction: row;
+  }
   // 垂直居中
   &.ac {
     align-items: center;
@@ -124,6 +127,8 @@ body {
 
 .content {
   flex: 1;
+  padding: 0 10px;
+  background: #ddd;
 }
 
 .ui {
@@ -162,6 +167,12 @@ body {
 
 .font-white {
   color: #fff;
+}
+.status {
+  width: 8px;
+  height: 8px;
+  background: #26c281;
+  border-radius: 50%;
 }
 
 .swiper-button-prev,

@@ -7,7 +7,7 @@ class Mongodb {
   // 查询 只返回一条数据
   query(param = {}) {
     return new Promise((resolve, reject) => {
-      console.log(param)
+      console.log('query param',param)
       models[this.modelName].findOne(param, (err, res) => {
         if (err) reject(err)
         resolve(res)
@@ -25,7 +25,7 @@ class Mongodb {
     })
   }
   //保存
-  save(param) {
+  async save(param) {
     return new Promise((resolve, reject) => {
       new models[this.modelName](param).save((err, res) => {
         if (err) reject(err)
@@ -43,6 +43,16 @@ class Mongodb {
       models[this.modelName].updateOne(whereStr, updateStr, (err, res) => {
         if (err) reject(err)
         else resolve(res)
+      })
+    })
+  }
+
+  // 组合查询
+  populate(param) {
+    return new Promise((reslove, reject) => {
+      models[this.modelName].populate(param, (err, res) => {
+        if (err) reject(err)
+        else reslove(res)
       })
     })
   }

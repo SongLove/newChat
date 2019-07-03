@@ -10,7 +10,9 @@ import './assets/styles/index.scss'
 import './assets/iconFonts/iconfont.css'
 import { setRem } from './utils/rem.js'
 import axios from './api'
+import components from './utils/components'
 Vue.use(axios)
+Vue.use(components)
 
 Vue.config.productionTip = false
 Vue.use(Vant)

@@ -1,7 +1,19 @@
 <template>
   <div>
-    <p>111</p>
-    <p>222</p>
+    <head-tab title="消息"/>
+    <div
+      v-for="(item, index) in chatList"
+      @click="goChatRecord(item)"
+      :key="index"
+      class="chat flex ac jb dir-r"
+    >
+      <img class="chat-avater" :src="item.chatWith.avater" />
+      <article class="chat-msgbox">
+        <p class="chat-name">{{item.chatWith.user_name}}</p>
+        <p class="chat-msg">{{item.content}}</p>
+      </article>
+      <div class="chat-status status"></div>
+    </div>
     <van-cell-group>
       <van-field v-model="msgInp" center clearable placeholder="请输入消息内容">
         <van-button slot="button" size="small" @click="sendCat" type="primary">发送</van-button>
@@ -12,16 +24,17 @@
 
 <script>
 import Socket from '../../utils/socket'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'newschat',
   created() {
     // 收到的消息
     Socket.Instance.on('receiveMsg', this.receiveMsg)
     this.gettUserInfo()
+    this.getChatList()
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo', 'chatList'])
   },
   data() {
     return {
@@ -30,11 +43,40 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['set_chatList']),
+    getChatList() {
+      this.$api
+        .sendChatList({ user_id: this.userInfo._id })
+        .then(({ data }) => {
+          console.log('当前用户聊天列表', data)
+          this.set_chatList(data)
+        })
+    },
+    goChatRecord(param) {
+      this.$router.push({
+        path: '/chat',
+        query: {
+          chatwithid: param.chatWith._id,
+          chatwith: param.chatWith.user_name
+        }
+      })
+    },
+    getChatRecord() {
+      // 查找当前用户与其用户的聊天记录
+      let obj = {
+        chatwith_id: this.tUserInfo._id,
+        user_id: this.userInfo._id
+      }
+      this.$api.sendChatRecord(obj).then(data => {
+        console.log('全部聊天记录', data)
+      })
+    },
     gettUserInfo() {
       this.$api
         .sendUserInfo({ user_name: this.$route.query.chatwith })
         .then(({ data }) => {
           this.tUserInfo = data
+          this.getChatRecord()
           console.log(data)
         })
     },
@@ -72,6 +114,30 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.chat {
+  width: 100%;
+  padding: 10px 0;
+  &-avater {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  &-name {
+    font-size: $nameSize;
+    margin-bottom: 5px;
+  }
+  &-msgbox {
+    flex: 1;
+    margin-right: 10px;
+  }
+  &-msg {
+    padding-bottom: 5px;
+    font-size: $msgSize;
+    border-bottom: 1px solid #000;
+  }
+}
 </style>
+
 
