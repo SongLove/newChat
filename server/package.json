@@ -9,12 +9,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ali-oss": "^6.1.1",
+    "co": "^4.6.0",
+    "fs": "0.0.1-security",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "koa-socket": "^4.4.0",
     "mongodb": "^3.2.7",
     "mongoose": "^5.6.2",
+    "multiparty": "^4.2.1",
     "socket.io": "^2.2.0",
     "ws": "^7.0.1"
   }

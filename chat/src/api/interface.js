@@ -51,6 +51,15 @@ export const sendUserInfo = params => {
 }
 
 
+// 发表动态
+export const sendUpQyq = data => {
+  return axios({
+    url: '/upload/upqyq',
+    method: 'post',
+    data
+  })
+}
+
 // 默认全部倒出
 // 根绝需要进行  
 export default {
@@ -58,5 +67,5 @@ export default {
   mock,
   sendUserInfo,
   sendChatRecord,
-  sendChatList
+  sendUpQyq
 }

@@ -66,17 +66,61 @@ const chatRelationSchema = new Schema({
   }]
 })
 
+// 动态
+const qyqSchema = new Schema({
+  // 用户
+  writer: {
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  content: String,
+  addTime: {
+    type: Date,
+    default: Date.now
+  },
+  uploadImg: { // 图片
+    type: Array,
+    default: []
+  },
+  agree: [{ // 点赞
+    type: Schema.Types.ObjectId,
+    ref: 'user'
+  }],
+  comments: [{// 评论
+    type: Schema.Types.ObjectId,
+    ref: 'comment'
+  }]
+})
+
+// 动态评论
+const commentSchema = new Schema({
+  from: String,// 评论的用户
+  to: String, // 指定回复的用户
+  writer: String, // 这条动态的作者
+  content: String, // 评价内容
+  qyq:{ // 这条动态的id
+    type: Schema.Types.ObjectId,
+    ref: 'qyq'
+  },
+  addTime: {
+    type: Date,
+    default: Date.now
+  }
+})
+
 const userModel = mongoose.model('user', userSchema)
 const idtoidModel = mongoose.model('idtoid', idtodiSchema)
 const chatContentModel = mongoose.model('chatcontent', chatContentSchema)
 const chatRelationModel = mongoose.model('chatrelation', chatRelationSchema)
+const qyqModel = mongoose.model('qyq', qyqSchema)
 
 
 const modelS = {
   user: userModel,
   idtoid: idtoidModel,
   chatcontent: chatContentModel,
-  chatrelation: chatRelationModel
+  chatrelation: chatRelationModel,
+  qyq: qyqModel
 }
 
 module.exports = modelS

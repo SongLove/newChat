@@ -11,6 +11,7 @@ const bodyParser = require('koa-bodyparser')// 处理post请求，把 koa2 上�
 
 // 划分模块
 
+router.use('/upload', require('./routers/upload'))
 router.use('/chat', require('./routers/chat'))
 router.use('/profile', require('./routers/profile'))
 

@@ -57,4 +57,5 @@ class Mongodb {
     })
   }
 }
+
 module.exports = Mongodb
