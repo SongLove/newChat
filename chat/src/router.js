@@ -7,6 +7,7 @@ import Upload from './views/Upload/upload.vue'
 import Search from './views/Search/search.vue'
 import MyPage from './views/MyPage/myPage.vue'
 import Login from './views/Login/login.vue'
+import UserSpace from './views/UserSpace/userSpace.vue'
 
 Vue.use(VueRouter)
 
@@ -20,7 +21,8 @@ let router = new VueRouter({
     { path: '/search', name: Search.name, component: Search },
     { path: '/mypage', name: MyPage.name, component: MyPage },
     { path: '/login', name: Login.name, component: Login },
-    { path: '/chat', name: Chat.name, component: Chat }
+    { path: '/chat', name: Chat.name, component: Chat },
+    { path: '/userspace', name: UserSpace.name, component: UserSpace }
   ]
 })
 
