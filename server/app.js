@@ -9,11 +9,23 @@ const socketHandler = require('./socket')
 const bodyParser = require('koa-bodyparser')// 处理post请求，把 koa2 上下文的表单数据解析到
 
 
-// 划分模块
+app.use(async (ctx, next) => {
+  ctx.set('Access-Control-Allow-Origin', '*');
+  ctx.set('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+  console.log(`${ctx.method}`, `${ctx.url}`);
+  if (ctx.method == 'OPTIONS') {
+    ctx.body = 200;
+  } else {
+    await next();
+  }
+});
 
+// 划分模块
 router.use('/upload', require('./routers/upload'))
 router.use('/chat', require('./routers/chat'))
 router.use('/profile', require('./routers/profile'))
+router.use('/qyq', require('./routers/qyq'))
 
 
 const io = require('socket.io')(server)

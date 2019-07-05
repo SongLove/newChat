@@ -60,6 +60,16 @@ export const sendUpQyq = data => {
   })
 }
 
+// 取所有动态 动态大厅
+export const sendQyqList = params => {
+  return axios({
+    url: '/qyq/qyqlist',
+    method: 'get',
+    params
+  })
+}
+
+
 // 默认全部倒出
 // 根绝需要进行  
 export default {
@@ -67,5 +77,7 @@ export default {
   mock,
   sendUserInfo,
   sendChatRecord,
-  sendUpQyq
+  sendUpQyq,
+  sendQyqList,
+  sendChatList
 }

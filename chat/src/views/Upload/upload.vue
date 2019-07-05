@@ -62,12 +62,12 @@ export default {
     sendReport() {
       // 发表
       let dataFrom = new FormData()
-      dataFrom.append('file', this.postFileList)
+      dataFrom.append('file', this.postFileList[0])
       let obj = {
-        user_id: this.userInfo._id,
-        content: this.message,
-        dataFrom
+        writer: this.userInfo._id,
+        content: this.message
       }
+      console.log(obj)
       this.$api.sendUpQyq(obj).then(res => {
         console.log('发表动态', res)
       })
