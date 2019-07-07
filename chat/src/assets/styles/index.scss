@@ -11,6 +11,10 @@ body {
   height: 100%;
 }
 
+.namecolor{
+  color: #026cff;
+}
+
 // flex
 .flex {
   display: flex;
@@ -39,7 +43,7 @@ body {
   }
   // 居底部
   &.as {
-    align-self: flex-end;
+    align-items: stretch;
   }
 }
 
@@ -115,8 +119,8 @@ body {
 
 // clearfix
 .clearfix:after {
-  content: ".";
-  display: table;
+  content: "";
+  display: block;
   height: 0;
   clear: both;
 }
@@ -126,9 +130,12 @@ body {
 }
 
 .content {
-  flex: 1;
+  position: fixed;
   padding: 0 10px;
-  background: #ddd;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
 }
 
 .ui {

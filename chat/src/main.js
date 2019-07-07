@@ -11,11 +11,15 @@ import './assets/iconFonts/iconfont.css'
 import { setRem } from './utils/rem.js'
 import axios from './api'
 import components from './utils/components'
+import Directives from './utils/directives'
 Vue.use(axios)
 Vue.use(components)
 
 Vue.config.productionTip = false
 Vue.use(Vant)
+Object.keys(Directives).forEach(item => {
+  Vue.directive(item, Directives[item])
+})
 Toast.setDefaultOptions({ duration: 1200 })
 Vue.use(Toast)
 /* 设置rem */

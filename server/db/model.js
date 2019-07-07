@@ -30,7 +30,7 @@ const chatContentSchema = new Schema({
   },
   addTime: {
     type: Date,
-    default: Date.now
+    default: new Date().getTime()
   },
   // 此次消息内容
   content: {
@@ -59,11 +59,11 @@ const chatRelationSchema = new Schema({
   userB: {
     type: Schema.Types.ObjectId,
     ref: 'user'
-  },
-  chatContent: [{
-    type: Schema.Types.ObjectId,
-    ref: 'chatcontent'
-  }]
+  }, chatContent
+    : [{
+      type: Schema.Types.ObjectId,
+      ref: 'chatcontent'
+    }]
 })
 
 // 动态
@@ -76,7 +76,7 @@ const qyqSchema = new Schema({
   content: String,
   addTime: {
     type: Date,
-    default: Date.now
+    default: new Date().getTime()
   },
   uploadImg: { // 图片
     type: Array,
@@ -98,13 +98,13 @@ const commentSchema = new Schema({
   to: String, // 指定回复的用户
   writer: String, // 这条动态的作者
   content: String, // 评价内容
-  qyq:{ // 这条动态的id
+  qyq: { // 这条动态的id
     type: Schema.Types.ObjectId,
     ref: 'qyq'
   },
   addTime: {
     type: Date,
-    default: Date.now
+    default: new Date().getTime()
   }
 })
 
@@ -113,6 +113,7 @@ const idtoidModel = mongoose.model('idtoid', idtodiSchema)
 const chatContentModel = mongoose.model('chatcontent', chatContentSchema)
 const chatRelationModel = mongoose.model('chatrelation', chatRelationSchema)
 const qyqModel = mongoose.model('qyq', qyqSchema)
+const commentModel = mongoose.model('comment', commentSchema)
 
 
 const modelS = {
@@ -120,7 +121,8 @@ const modelS = {
   idtoid: idtoidModel,
   chatcontent: chatContentModel,
   chatrelation: chatRelationModel,
-  qyq: qyqModel
+  qyq: qyqModel,
+  comment: commentModel
 }
 
 module.exports = modelS

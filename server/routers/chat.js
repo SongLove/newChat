@@ -111,7 +111,13 @@ router.get('/chatrecord', async (ctx, next) => {
 router.get('/chatList', async (ctx, next) => {
   let { user_id } = ctx.query
   await chatrelationSchema
-    .find({ userA: user_id })
+    .find({
+      $or: [{
+        userA: user_id
+      }, {
+        userB: user_id
+      }]
+    })
     .populate(['userB', {
       path: 'chatwith_id',
       populate: { path: 'chatwith_id' }
@@ -121,8 +127,6 @@ router.get('/chatList', async (ctx, next) => {
       }]).then(res => {
         console.log('聊天列表', res)
         if (res) {
-
-
           let responseData
           let dataArr = []
           res.forEach(item => {

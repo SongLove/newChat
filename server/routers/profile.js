@@ -3,12 +3,13 @@ const Router = require('koa-router')
 const router = new Router()
 const ModelDB = require('../db')
 
+const userModel = new ModelDB('user')
+
 router.get('/userinfo', async (ctx, next) => {
   ctx.type = 'json'
   let responseData
-  let { user_name } = ctx.query
-  let data = await new ModelDB('user').query({ user_name })
-  console.log('userinfo：' + data)
+  let data = await userModel.query(ctx.query)
+  console.log('userinfo：', ctx.query)
   if (data) {
     responseData = {
       code: 200,
@@ -23,6 +24,19 @@ router.get('/userinfo', async (ctx, next) => {
     }
   }
   ctx.response.body = responseData
+})
+
+// 修改用户信息
+router.post('/alterinfo', async (ctx, next) => {
+  let { user_id, alter } = ctx.request.body
+  await userModel.updateOne({ _id: user_id }, alter).then((res) => {
+    if (res) {
+      ctx.response.body = {
+        code: 200,
+        msg: '修改用户信息成功'
+      }
+    }
+  })
 })
 
 module.exports = router.routes()

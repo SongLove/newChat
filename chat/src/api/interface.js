@@ -7,7 +7,6 @@ import axios from './axios' // 倒入 api
 
 // 单独发送聊天记录
 export const sendMessage = data => {
-  console.log(data)
   return axios({
     url: '/chat/chatwith',
     method: 'post',
@@ -15,13 +14,6 @@ export const sendMessage = data => {
   })
 }
 
-export const mock = params => {
-  return axios({
-    url: '/chat/mock',
-    method: 'get',
-    params
-  })
-}
 
 // 查找当前用户与其用户的聊天记录
 export const sendChatRecord = params => {
@@ -50,6 +42,14 @@ export const sendUserInfo = params => {
   })
 }
 
+// 修改用户信息
+export const sendAlterInfo = data => {
+  return axios({
+    url: '/profile/alterInfo',
+    method: 'post',
+    data
+  })
+}
 
 // 发表动态
 export const sendUpQyq = data => {
@@ -69,15 +69,35 @@ export const sendQyqList = params => {
   })
 }
 
+// 取所有动态 动态大厅
+export const sendTQyqList = params => {
+  return axios({
+    url: '/qyq/tqyqlist',
+    method: 'get',
+    params
+  })
+}
+
+// 评论动态
+export const sendComment = data => {
+  return axios({
+    url: '/qyq/qyqcomment',
+    method: 'post',
+    data
+  })
+}
+
 
 // 默认全部倒出
 // 根绝需要进行  
 export default {
   sendMessage,
-  mock,
   sendUserInfo,
+  sendAlterInfo,
   sendChatRecord,
   sendUpQyq,
   sendQyqList,
-  sendChatList
+  sendTQyqList,
+  sendChatList,
+  sendComment
 }

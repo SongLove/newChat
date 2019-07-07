@@ -15,14 +15,14 @@ let router = new VueRouter({
   mode: 'history',
   linkActiveClass: 'active',
   routes: [
-    { path: '/', name: Home.name, component: Home },
-    { path: '/news', name: NewsChat.name, component: NewsChat },
-    { path: '/upload', name: Upload.name, component: Upload },
-    { path: '/search', name: Search.name, component: Search },
-    { path: '/mypage', name: MyPage.name, component: MyPage },
-    { path: '/login', name: Login.name, component: Login },
-    { path: '/chat', name: Chat.name, component: Chat },
-    { path: '/userspace', name: UserSpace.name, component: UserSpace }
+    { path: '/', name: Home.name, component: Home, meta: { keepAlive: false } },
+    { path: '/news', name: NewsChat.name, component: NewsChat, meta: { keepAlive: false } },
+    { path: '/upload', name: Upload.name, component: Upload, meta: { keepAlive: true } },
+    { path: '/search', name: Search.name, component: Search, meta: { keepAlive: false } },
+    { path: '/mypage', name: MyPage.name, component: MyPage, meta: { keepAlive: false } },
+    { path: '/login', name: Login.name, component: Login, meta: { keepAlive: true } },
+    { path: '/chat', name: Chat.name, component: Chat, meta: { keepAlive: true } },
+    { path: '/userspace', name: UserSpace.name, component: UserSpace, meta: { keepAlive: true } }
   ]
 })
 
