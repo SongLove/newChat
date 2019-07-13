@@ -1,11 +1,7 @@
 <template>
-  <div>
+  <scroll>
     <article>
-      <div
-        v-for="(qyq, index) in qyqList"
-        :key="index"
-        class="qyq flex dir-row p-r"
-      >
+      <div v-for="(qyq, index) in qyqList" :key="index" class="qyq flex dir-row p-r">
         <!-- 头像 -->
         <img
           @click="goUserSpace(qyq.writer._id, qyq.writer.user_name)"
@@ -24,17 +20,10 @@
           <!-- 评论 -->
           <div class="qyq-interact flex jb ac">
             <span>{{qyq.addTime}}</span>
-            <span
-              class="comment"
-              @click="commentQyq(qyq)"
-            >评论</span>
+            <span class="comment" @click="commentQyq(qyq)">评论</span>
           </div>
           <!-- 评论列表 -->
-          <ul
-            class="qyq-commentlist"
-            v-for="(comment, index) in qyq.comments"
-            :key="index"
-          >
+          <ul class="qyq-commentlist" v-for="(comment, index) in qyq.comments" :key="index">
             <li @click="commentQyq(qyq, comment)">
               <!-- 评论 -->
               <div v-if="!comment.to">
@@ -54,18 +43,11 @@
           </ul>
         </div>
         <!--如果是当前用户的动态 显示删除按钮-->
-        <i
-          v-if="qyq.writer._id == userInfo._id"
-          class="iconfont icon-guanbi qyq-close p-ab"
-        ></i>
+        <i v-if="qyq.writer._id == userInfo._id" class="iconfont icon-guanbi qyq-close p-ab"></i>
       </div>
     </article>
     <!-- 评论内容 -->
-    <van-popup
-      v-model="showComment"
-      position="bottom"
-      :style="{ height: '20%' }"
-    >
+    <van-popup v-model="showComment" position="bottom" :style="{ height: '20%' }">
       <van-cell-group>
         <van-field
           v-model="commentContent"
@@ -75,22 +57,17 @@
           rows="1"
           :autosize="{maxHeight: 200, minHeight: 150}"
         >
-          <van-button
-            slot="button"
-            size="small"
-            @click="submitCommtent"
-            type="primary"
-          >发 送</van-button>
+          <van-button slot="button" size="small" @click="submitCommtent" type="primary">发 送</van-button>
         </van-field>
       </van-cell-group>
     </van-popup>
-  </div>
+  </scroll>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  name: "qyqcontent",
+  name: 'qyqcontent',
   props: {
     qyqList: {
       tyep: Array,
@@ -100,14 +77,14 @@ export default {
   data() {
     return {
       showComment: false, // 是否显示评论弹窗
-      replyLab: "", // 回复谁
-      commentContent: "", // 评论或者回复内容
+      replyLab: '', // 回复谁
+      commentContent: '', // 评论或者回复内容
       atQyq: {}, // 当前评论或者回复的数据
       atReply: {} // 当前回复的数据
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   methods: {
     /**
@@ -116,49 +93,49 @@ export default {
      * @param reply 为回复内容
      */
     commentQyq(qyq, reply) {
-      this.atQyq = qyq;
-      this.atReply = reply;
-      this.showComment = true;
+      this.atQyq = qyq
+      this.atReply = reply
+      this.showComment = true
       if (reply) {
-        this.replyLab = `回复@${reply.from}`;
+        this.replyLab = `回复@${reply.from}`
       } else {
-        this.replyLab = `评论@${qyq.writer.user_name}`;
+        this.replyLab = `评论@${qyq.writer.user_name}`
       }
     },
     // 提交评论或者回复
     submitCommtent() {
       let obj = {
         from: this.userInfo.user_name, // 来之谁的评论
-        to: this.atReply ? this.atReply.from : "", // 回复谁的评论
+        to: this.atReply ? this.atReply.from : '', // 回复谁的评论
         writer: this.atQyq.writer.user_name, // 这条评论的作者
         content: this.commentContent, // 评论内容
         qyq: this.atQyq._id // 评论的id
-      };
-      console.log(obj);
+      }
+      console.log(obj)
       this.$api.sendComment(obj).then(({ msg }) => {
         this.$toast({
           message: msg,
           duration: 100,
           onClose: () => {
-            this.showComment = false;
-            this.$emit("afreshQyq");
+            this.showComment = false
+            this.$emit('afreshQyq')
           }
-        });
-      });
+        })
+      })
     },
     // 进入用户空间
     goUserSpace(user_id, user_name) {
-      console.log(this);
+      console.log(this)
       this.$router.push({
-        path: "/userspace",
+        path: '/userspace',
         query: {
           user_id,
           user_name
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

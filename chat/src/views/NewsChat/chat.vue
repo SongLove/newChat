@@ -1,28 +1,14 @@
 <template>
   <div class="chatwith p-f">
-    <head-tab
-      :title="$route.query.chatwith"
-      @back="back"
-      :back="true"
-    >
+    <head-tab :title="$route.query.chatwith" @back="back" :back="true">
       <div slot="headright">右边</div>
     </head-tab>
-    <!-- <ul class="chat">
-      <li
-        v-for="(item, index) in dataList"
-        :key="index"
-      >{{item.content}}</li>
-      <li></li>
-    </ul> -->
-    <div
-      id="chatview"
-      class="p1"
-    >
+    <div id="chatview" class="p1">
       <div id="chat-messages">
         <template v-for="(item, index) in dataList">
           <template v-if="colConf[index]">
             <div class="message right" :key="index">
-              <img :src="item.user_id.avater">
+              <img :src="item.user_id.avater" />
               <div class="bubble">
                 {{item.content}}
                 <div class="corner"></div>
@@ -32,7 +18,7 @@
           </template>
           <template v-else>
             <div class="message left" :key="index">
-               <img :src="item.chatwith_id.avater">
+              <img :src="item.chatwith_id.avater" />
               <div class="bubble">
                 {{item.content}}
                 <div class="corner"></div>
@@ -43,39 +29,29 @@
         </template>
       </div>
       <van-cell-group>
-        <van-field
-          v-model="msgInp"
-          center
-          clearable
-          placeholder="请输入消息内容"
-        >
-          <van-button
-            slot="button"
-            size="small"
-            @click="sendCat"
-            type="primary"
-          >发送</van-button>
+        <van-field v-model="msgInp" center clearable placeholder="请输入消息内容">
+          <van-button slot="button" size="small" @click="sendCat" type="primary">发送</van-button>
         </van-field>
       </van-cell-group>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
-import Socket from "../../utils/socket";
+import { mapState } from 'vuex'
+import Socket from '../../utils/socket'
 export default {
-  name: "chat",
+  name: 'chat',
   created() {
-    this.gettUserInfo();
+    this.gettUserInfo()
+    Socket.Instance.on('receiveMsg', this.receiveMsg)
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(['userInfo']),
     colConf() {
       let colConf = {}
       this.dataList.forEach((item, index) => {
         colConf[index] = item.user_id._id == this.userInfo._id
-      });
-      console.log(colConf, 'colConf')
+      })
       return colConf
     }
   },
@@ -83,76 +59,85 @@ export default {
     return {
       dataList: [],
       tUserInfo: {},
-      msgInp: ""
-    };
+      msgInp: ''
+    }
   },
   methods: {
     back() {
-      this.$router.go(-1);
+      this.$router.go(-1)
+    },
+    // 接收别人发过来的消息
+    receiveMsg({ data, msg }) {
+      console.log('发过过来的消息：', data, msg)
+      let This = this
+      this.dataList.push({
+        user_id: This.tUserInfo,
+        chatwith_id: This.tUserInfo,
+        content: data.content,
+        addTime: data.addTime,
+        unread: true
+      })
     },
     sendCat() {
       let obj = {
         chatwith_id: this.tUserInfo._id,
         user_id: this.userInfo._id,
         content: this.msgInp
-      };
+      }
 
       this.$api.sendMessage(obj).then(({ data }) => {
         // 发送成功之后，向对方推送消息
-        let This = this;
+        let This = this
         this.dataList.push({
           user_id: This.userInfo,
+          chatwith_id: This.tUserInfo,
           content: data.content,
           addTime: data.addTime,
           unread: data.unread
-        });
-        console.log(This.userInfo);
+        })
 
         Socket.Instance.send({
-          cmd: "chat",
+          cmd: 'chat',
           param: {
             from_user: this.userInfo.user_name,
             to_user: this.tUserInfo.user_name,
             avater: this.userInfo.avater,
             _id: this.userInfo._id,
-            messge: this.msgInp
+            content: this.msgInp,
+            addTime: Date.now()
           }
-        });
+        })
 
-
-        this.msgInp = "";
-      });
-      // this.$api.mock({bbb:'11'}).then((res) => {
-      //   console.log('get', res)
-      // })
+        this.msgInp = ''
+      })
     },
     gettUserInfo() {
       this.$api
         .sendUserInfo({ _id: this.$route.query.chatwithid })
         .then(({ data }) => {
-          this.tUserInfo = data;
-          this.getChatRecord();
-          console.log(data);
-        });
+          this.tUserInfo = data
+          this.getChatRecord()
+          console.log(data)
+        })
     },
     getChatRecord() {
       // 查找当前用户与其用户的聊天记录
       let obj = {
         chatwith_id: this.$route.query.chatwithid,
         user_id: this.userInfo._id
-      };
+      }
       this.$api.sendChatRecord(obj).then(({ data }) => {
-        console.log("全部聊天记录", data);
+        console.log('全部聊天记录', data)
         if (data) {
-          this.dataList = data.reverse();
+          this.dataList = data.reverse()
         }
-      });
+      })
     }
   },
   deactivated() {
-    this.dataList = [];
+    this.dataList = []
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

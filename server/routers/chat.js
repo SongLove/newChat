@@ -118,12 +118,13 @@ router.get('/chatList', async (ctx, next) => {
         userB: user_id
       }]
     })
-    .populate(['userB', {
-      path: 'chatwith_id',
-      populate: { path: 'chatwith_id' }
-    }, 'chatContent', {
-        path: 'chatwith_id',
+    .populate(['chatContent',
+      {
+        path: 'chatContent',
         populate: { path: 'chatwith_id' }
+      }, {
+        path: 'chatContent',
+        populate: { path: 'user_id' }
       }]).then(res => {
         console.log('聊天列表', res)
         if (res) {
@@ -131,9 +132,16 @@ router.get('/chatList', async (ctx, next) => {
           let dataArr = []
           res.forEach(item => {
             let oneItem = item.chatContent[0]
+            console.log('oneItem', oneItem.chatwith_id, oneItem.user_id, oneItem.chatwith_id._id, user_id)
+            let userWith
+            if (oneItem.chatwith_id._id == user_id ) {
+              userWith = oneItem.user_id
+            } else {
+              userWith = oneItem.chatwith_id
+            }
             responseData = {
               addTime: oneItem.addTime,
-              chatWith: item.userB,
+              chatWith: userWith,
               content: oneItem.content,
               unread: oneItem.unread,
             }

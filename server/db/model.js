@@ -7,7 +7,7 @@ const userSchema = new Schema({
   pass_word: String,
   avater: {
     type: String,
-    default: 'https://www.jq22.com/tx/24.png'
+    default: 'http://tanggeek.oss-cn-beijing.aliyuncs.com/chat/24.png'
   },
   signature: {
     type: String,

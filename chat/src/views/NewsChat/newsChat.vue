@@ -7,104 +7,56 @@
       :key="index"
       class="chat flex ac jb dir-r"
     >
-      <img
-        class="chat-avater"
-        :src="item.chatWith.avater"
-      />
+      <img class="chat-avater" :src="item.chatWith.avater" />
       <article class="chat-msgbox">
         <p class="chat-name">{{item.chatWith.user_name}}</p>
         <p class="chat-msg">{{item.content}}</p>
       </article>
       <div class="chat-status status"></div>
     </div>
-    <van-cell-group>
-      <van-field
-        v-model="msgInp"
-        center
-        clearable
-        placeholder="请输入消息内容"
-      >
-        <van-button
-          slot="button"
-          size="small"
-          @click="sendCat"
-          type="primary"
-        >发送</van-button>
-      </van-field>
-    </van-cell-group>
   </div>
 </template>
 
 <script>
-import Socket from "../../utils/socket";
-import { mapState, mapMutations } from "vuex";
+import Socket from '../../utils/socket'
+import { mapState, mapMutations } from 'vuex'
 export default {
-  name: "newschat",
+  name: 'newschat',
   created() {
     // 收到的消息
-    Socket.Instance.on("receiveMsg", this.receiveMsg);
-    this.getChatList();
+    Socket.Instance.on('receiveMsg', this.receiveMsg)
+    this.getChatList()
   },
   computed: {
-    ...mapState(["userInfo", "chatList"])
+    ...mapState(['userInfo', 'chatList'])
   },
   data() {
     return {
-      msgInp: "",
+      msgInp: '',
       tUserInfo: {} // 存放当前与其了解的用户信息
-    };
+    }
   },
   methods: {
-    ...mapMutations(["set_chatList"]),
+    ...mapMutations(['set_chatList']),
     getChatList() {
       this.$api
         .sendChatList({ user_id: this.userInfo._id })
         .then(({ data }) => {
-          console.log("当前用户聊天列表", data);
-          this.set_chatList(data);
-        });
+          console.log('当前用户聊天列表', data)
+          this.set_chatList(data)
+        })
     },
     goChatRecord(param) {
       this.$router.push({
-        path: "/chat",
+        path: '/chat',
         query: {
           chatwithid: param.chatWith._id,
           chatwith: param.chatWith.user_name
         }
-      });
-    },
-    receiveMsg(data) {
-      console.log(data, "收到的消息");
-    },
-    sendCat() {
-      let obj = {
-        chatwith_id: this.tUserInfo._id,
-        user_id: this.userInfo._id,
-        content: this.msgInp
-      };
-
-      this.$api.sendMessage(obj).then(res => {
-        // 发送成功之后，向对方推送消息
-        console.log(res);
-        Socket.Instance.send({
-          cmd: "chat",
-          param: {
-            from_user: this.userInfo.user_name,
-            to_user: this.tUserInfo.user_name,
-            avater: this.userInfo.avater,
-            addTime: Date.now(),
-            _id: this.userInfo._id,
-            messge: this.msgInp
-          }
-        });
-        this.msgInp = "";
-      });
-      // this.$api.mock({bbb:'11'}).then((res) => {
-      //   console.log('get', res)
-      // })
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

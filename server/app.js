@@ -86,7 +86,7 @@ io.on('connection', socket => {
   // 监听用户发送的消息
   socket.on('chat', async (obj) => {
     console.log('socket chat: ' + JSON.stringify(obj))
-    let { from_user, to_user, messge, addTime, avater, _id } = obj
+    let { from_user, to_user, content, addTime, avater, _id } = obj
     let Idtoid = new ModelDB('idtoid')
     Idtoid.query({
       user_name: to_user
@@ -98,7 +98,7 @@ io.on('connection', socket => {
         code: 200,
         data: {
           from_user,
-          messge,
+          content,
           addTime,
           avater,
           _id
