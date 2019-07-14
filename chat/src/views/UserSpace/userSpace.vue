@@ -5,18 +5,18 @@
       @back="$router.go(-1)"
       :back="true"
     >
-      <div slot="headright">右边</div>
+      <van-button
+        @click="goChatRecord($route.query)"
+        class="recordBtn"
+        slot="headright"
+        type="primary"
+        size="large"
+      >发消息</van-button>
     </head-tab>
     <qyq-content
       :qyqList="tQyqList"
       @afreshQyq="getUserQyq"
     />
-    <van-button
-      @click="goChatRecord($route.query)"
-      class="recordBtn"
-      type="primary"
-      size="large"
-    >发消息</van-button>
   </div>
 </template>
 <script>

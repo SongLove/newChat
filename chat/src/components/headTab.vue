@@ -1,5 +1,5 @@
 <template>
-  <div class="head-tab flex ac jc jb">
+  <div class="head-tab flex ac jc jb p-ab">
     <div>
       <i
         class="iconfont icon-fanhui"
@@ -32,6 +32,8 @@ export default {
 .head-tab {
   width: 100%;
   height: 40px;
+  top: 0;
+  left: 0;
   font-size: $nameSize;
   background: $tabBg;
   &-title {
