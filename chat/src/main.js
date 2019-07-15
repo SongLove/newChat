@@ -12,7 +12,6 @@ import { setRem } from './utils/rem.js'
 import axios from './api'
 import components from './utils/components'
 import Directives from './utils/directives'
-import Scroll from './components/scroll'
 Vue.use(axios)
 Vue.use(components)
 
@@ -22,8 +21,6 @@ Vue.use(Vant)
 Object.keys(Directives).forEach(item => {
   Vue.directive(item, Directives[item])
 })
-
-Vue.component('Scroll', Scroll)
 
 Toast.setDefaultOptions({ duration: 1200 })
 Vue.use(Toast)

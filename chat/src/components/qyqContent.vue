@@ -1,5 +1,5 @@
 <template>
-  <scroll>
+  <div>
     <article>
       <div v-for="(qyq, index) in qyqList" :key="index" class="qyq flex dir-row p-r">
         <!-- 头像 -->
@@ -45,9 +45,10 @@
         <!--如果是当前用户的动态 显示删除按钮-->
         <i v-if="qyq.writer._id == userInfo._id" class="iconfont icon-guanbi qyq-close p-ab"></i>
       </div>
+      <!-- <loading v-show="loading" /> -->
     </article>
     <!-- 评论内容 -->
-    <van-popup v-model="showComment" position="bottom" :style="{ height: '20%' }">
+    <!-- <van-popup v-model="showComment" position="bottom" :style="{ height: '20%' }">
       <van-cell-group>
         <van-field
           v-model="commentContent"
@@ -60,12 +61,13 @@
           <van-button slot="button" size="small" @click="submitCommtent" type="primary">发 送</van-button>
         </van-field>
       </van-cell-group>
-    </van-popup>
-  </scroll>
+    </van-popup> -->
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+
 export default {
   name: 'qyqcontent',
   props: {
@@ -80,7 +82,8 @@ export default {
       replyLab: '', // 回复谁
       commentContent: '', // 评论或者回复内容
       atQyq: {}, // 当前评论或者回复的数据
-      atReply: {} // 当前回复的数据
+      atReply: {}, // 当前回复的数据
+      loading: false
     }
   },
   computed: {
@@ -125,7 +128,6 @@ export default {
     },
     // 进入用户空间
     goUserSpace(user_id, user_name) {
-      console.log(this)
       this.$router.push({
         path: '/userspace',
         query: {

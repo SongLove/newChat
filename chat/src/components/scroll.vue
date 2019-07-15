@@ -32,9 +32,14 @@ export default {
       type: Boolean,
       default: false
     },
-    refreshDelay: { // 动画
+    refreshDelay: {
+      // 动画
       type: Number,
       default: 20
+    },
+    scrollToEndFlag: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
@@ -47,19 +52,21 @@ export default {
       if (!this.$refs.wrapper) {
         return
       }
+      console.log(this.scrollToEndFlag)
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
         click: this.click
       })
       if (this.listenScroll) {
         let me = this
-        this.scroll.on('scroll', (pos) => {
+        this.scroll.on('scroll', pos => {
           me.$emit('scroll', pos)
         })
       }
       if (this.pullup) {
-        this.scroll.on('scrollEnd', () => { // scrollEnd 滚动结束
-          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+        this.scroll.on('scrollEnd', () => {
+          // scrollEnd 滚动结束
+          if (this.scroll.y <= this.scroll.maxScrollY + 100) {
             this.$emit('scrollToEnd')
           }
         })
@@ -84,12 +91,22 @@ export default {
     },
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+    },
+    scrollToBottom() {
+      // 需要以进来就到底部
+      if (this.scrollToEndFlag && this.scroll) {
+        this.scrollTo(0, this.scroll.maxScrollY, 150)
+      }
     }
   },
   watch: {
     data() {
       setTimeout(() => {
         this.refresh()
+        // 需要以进来就到底部
+        if (this.scrollToEndFlag) {
+          this.scrollToBottom()
+        }
       }, this.refreshDelay)
     }
   }
@@ -97,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.scroll-wrapper{
+.scroll-wrapper {
   height: 100%;
   overflow: hidden;
 }
