@@ -1,60 +1,53 @@
 <template>
-  <div
-    id="app"
-    class="flex dir-col"
-  >
-    <router-view
-      v-if="!$route.meta.keepAlive"
-      class="content"
-    />
+  <div id="app" class="flex dir-col">
+    <keep-alive>
+      <router-view v-if="!$route.meta.keepAlive" class="content" />
+    </keep-alive>
     <transition name="slide">
-      <router-view
-        v-if="$route.meta.keepAlive"
-        class="content"
-      />
+      <router-view v-if="$route.meta.keepAlive" class="content" />
     </transition>
     <footer-tab />
   </div>
 </template>
 
 <script>
-import Socket from "./utils/socket";
-import footerTab from "./components/footerTab.vue";
-import { mapState } from "vuex";
+import Socket from './utils/socket'
+import footerTab from './components/footerTab.vue'
+import { mapState } from 'vuex'
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     footerTab
   },
   created() {
-    this.updateSocket();
+    this.updateSocket()
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   methods: {
     updateSocket() {
       if (this.userInfo) {
         Socket.Instance.send({
-          cmd: "login",
+          cmd: 'login',
           param: {
             user_name: this.userInfo.user_name,
             pass_word: this.userInfo.password
           }
-        });
+        })
       }
     }
   },
   beforeCreate() {
-    Socket.Instance.init();
+    Socket.Instance.init()
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;

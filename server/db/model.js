@@ -9,6 +9,10 @@ const userSchema = new Schema({
     type: String,
     default: 'http://tanggeek.oss-cn-beijing.aliyuncs.com/chat/24.png'
   },
+  cover: {
+    type: String,
+    default: 'http://y.gtimg.cn/music/photo_new/T003R300x300M000003IZaQY4TJcOC.jpg'
+  },
   signature: {
     type: String,
     default: '这个人很懒，什么都没写'

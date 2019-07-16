@@ -30,7 +30,7 @@ export default function $axios(options) {
           || config.method.toLocaleLowerCase() === 'put'
           || config.method.toLocaleLowerCase() === 'delete') {
 
-          config.data = qs.stringify(config.data)
+          config.data = config.data
         }
         return config
       },

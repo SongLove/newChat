@@ -46,7 +46,6 @@ export default {
   created() {
     this.gettUserInfo()
     Socket.Instance.on('receiveMsg', this.receiveMsg)
-    
   },
   computed: {
     ...mapState(['userInfo']),

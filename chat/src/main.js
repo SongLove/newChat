@@ -12,8 +12,15 @@ import { setRem } from './utils/rem.js'
 import axios from './api'
 import components from './utils/components'
 import Directives from './utils/directives'
+import VueLazyload from 'vue-lazyload'
 Vue.use(axios)
 Vue.use(components)
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: require('./assets/img/error.jpg'),
+  loading:require('./assets/img/loading.jpg'),
+  attempt:3
+})
 
 Vue.config.productionTip = false
 Vue.use(Vant)

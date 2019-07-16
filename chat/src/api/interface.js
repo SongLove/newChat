@@ -59,6 +59,14 @@ export const sendUpQyq = data => {
     data
   })
 }
+// 图片上传
+export const sendUpImg = data => {
+  return axios({
+    url: '/upload/upimg',
+    method: 'post',
+    data
+  })
+}
 
 // 取所有动态 动态大厅
 export const sendQyqList = params => {
@@ -78,6 +86,7 @@ export const sendTQyqList = params => {
   })
 }
 
+
 // 评论动态
 export const sendComment = data => {
   return axios({
@@ -96,6 +105,7 @@ export default {
   sendAlterInfo,
   sendChatRecord,
   sendUpQyq,
+  sendUpImg,
   sendQyqList,
   sendTQyqList,
   sendChatList,

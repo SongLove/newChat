@@ -7,7 +7,7 @@
         @click="$emit('back')"
       ></i>
     </div>
-    <div class="head-tab-title">{{title}}</div>
+    <div class="head-tab-title ellipsis">{{title}}</div>
     <div>
       <slot name="headright"></slot>
     </div>

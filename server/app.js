@@ -7,7 +7,7 @@ const router = require('koa-router')()
 const server = require('http').createServer(app.callback())
 const socketHandler = require('./socket')
 const bodyParser = require('koa-bodyparser')// 处理post请求，把 koa2 上下文的表单数据解析到
-
+// const koaBody = require('koa-body')
 
 app.use(async (ctx, next) => {
   ctx.set('Access-Control-Allow-Origin', '*');
@@ -15,12 +15,13 @@ app.use(async (ctx, next) => {
   ctx.set('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   console.log(`${ctx.method}`, `${ctx.url}`);
   if (ctx.method == 'OPTIONS') {
-    ctx.body = 200;
+    ctx.response.body = 200;
   } else {
     await next();
   }
 });
-
+//app.use(koaBody({ multipart: true }))
+app.use(bodyParser())
 // 划分模块
 router.use('/upload', require('./routers/upload'))
 router.use('/chat', require('./routers/chat'))
@@ -108,10 +109,7 @@ io.on('connection', socket => {
     })
   })
 })
-
-app.use(bodyParser())
-app.use(router.routes()).use(router.allowedMethods())
-
+app.use(router.routes())
 server.listen(3300, () => {
   console.log('server listenIng on port: ' + config.serverUrl)
 })

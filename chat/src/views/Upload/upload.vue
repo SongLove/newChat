@@ -63,14 +63,22 @@ export default {
       // 发表
       let dataFrom = new FormData()
       dataFrom.append('file', this.postFileList[0])
-      let obj = {
-        writer: this.userInfo._id,
-        content: this.message
-      }
-      console.log(obj)
-      this.$api.sendUpQyq(obj).then(res => {
-        console.log('发表动态', res)
+      // dataFrom.append('writer',  this.userInfo._id)
+      // dataFrom.append('content', this.message)
+      this.$api.sendUpImg(dataFrom).then(({ data }) => {
+        let obj = {
+          writer: this.userInfo._id,
+          content: this.message,
+          uploadImg: data
+        }
+        this.$api.sendUpQyq(obj).then(res => {
+          console.log('发表动态', res)
+        })
       })
+
+      // this.$api.sendUpQyq(obj).then(res => {
+      //   console.log('发表动态', res)
+      // })
     }
   }
 }

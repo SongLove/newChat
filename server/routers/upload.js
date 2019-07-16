@@ -12,60 +12,58 @@ const client = new OSS({
   accessKeySecret: 'U5dkkcDaJ6NiF56bpo18kpsfxV7ajh' //自定义项
 })
 
+const uploadFile = async (req) => {
+  let alioss_upfile = () => {
+    return new Promise((resolve, reject) => {
+      // 上传多文件 使用multiparty
+      let form = new multiparty.Form({
+        encoding: 'utf-8',
+        keepExtensions: true // 保留后缀
+      })
+      form.parse(req, async function (err, fields, files) {
+        let data = []
+        for (let f of files.file) {
+          let date = new Date()
+          let time = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
+          let filepath = 'chat/' + time + '/' + date.getTime()
+          // 文件后缀
+          let [fileext] = [f.originalFilename.split('.').pop(), f.originalFilename.split('.').shift()]
+          let upfile = f.path
+          let newfile = filepath + '.' + fileext
+          client.useBucket('tanggeek')
+          await client.put(newfile, upfile).then((results) => {
+            data.push(results.url)
+          }).catch((err) => {
+            console.log(err)
+          })
+        }
+        console.log('文件上传成功!', data)
+        resolve(data)
+      })
+    })
+  }
+  return await alioss_upfile()
+}
+
+router.post('/upimg', async (ctx, next) => {
+  let responseData
+  await uploadFile(ctx.req).then(data => {
+    responseData = {
+      code: 200,
+      data
+    }
+  })
+  ctx.type = 'json'
+  ctx.response.body = responseData
+})
+
 router.post('/upqyq', async (ctx, next) => {
-  console.log('发表动态', ctx.request.body)
-  await new ModelDB('qyq').save(ctx.request.body)
+  let data = await new ModelDB('qyq').save(ctx.request.body)
   ctx.response.body = {
     code: 200,
-    msg: '发表成功'
+    data,
+    msg: '成功发表动态'
   }
-
-  // let alioss_upfile = () => {
-  //   return new Promise((resolve, reject) => {
-  //     // 上传多文件 使用multiparty
-  //     let form = new multiparty.Form({
-  //       encoding: 'utf-8',
-  //       keepExtensions: true // 保留后缀
-  //     })
-  //     form.parse(ctx.req, async function (err, fields, files) {
-  //       let data = []
-  //       let model = Models['qyq']
-  //       console.log('数据', err, fields, files)
-
-  //       for (let f of files.file) {
-  //         let date = new Date()
-  //         let time = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
-  //         let filepath = 'slideshow/' + time + '/' + date.getTime()
-  //         // 文件后缀
-  //         let [fileext, fileName] = [f.originalFilename.split('.').pop(), f.originalFilename.split('.').shift()]
-  //         let upfile = f.path
-  //         let newfile = filepath + '.' + fileext
-  //         let resultsRrl = ''
-  //         client.useBucket('tanggeek')
-  //         await client.put(newfile, upfile).then((results) => {
-  //           console.log('文件上传成功!', results.url)
-  //           resultsRrl = results.url
-  //           data.push(results.url)
-  //         }).catch((err) => {
-  //           console.log(err)
-  //         })
-  //         let obj = {
-  //           material_name: fileName,
-  //           material_tyle: fileext,
-  //           material_url: resultsRrl
-  //         }
-  //         await new model(obj)
-  //       }
-  //       ctx.type = 'json'
-  //       ctx.response.body = {
-  //         status: 200,
-  //         data: data
-  //       }
-  //       resolve(next())
-  //     })
-  //   })
-  // }
-  // await alioss_upfile()
 })
 
 module.exports = router.routes()

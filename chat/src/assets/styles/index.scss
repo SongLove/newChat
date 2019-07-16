@@ -11,7 +11,7 @@ body {
   height: 100%;
 }
 
-.namecolor{
+.namecolor {
   color: #026cff;
 }
 
@@ -137,6 +137,7 @@ body {
   bottom: 55px;
   width: 100%;
   z-index: 2;
+  background: #fff;
 }
 
 .ui {
@@ -225,4 +226,8 @@ body {
 // 2行省略号
 .ellipsis2 {
   @include textEllipsis(2);
+}
+// 2行省略号
+.ellipsis3 {
+  @include textEllipsis(3);
 }

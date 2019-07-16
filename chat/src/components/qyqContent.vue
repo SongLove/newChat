@@ -6,15 +6,15 @@
         <img
           @click="goUserSpace(qyq.writer._id, qyq.writer.user_name)"
           class="qyq-avater"
-          :src="qyq.writer.avater"
+          v-lazy="qyq.writer.avater"
         />
         <!-- 动态内容 -->
         <div class="qyq-msgbox">
           <p
             @click="goUserSpace(qyq.writer._id, qyq.writer.user_name)"
-            class="qyq-name"
+            class="qyq-name ellipsis"
           >{{qyq.writer.user_name}}</p>
-          <p class="qyq-content">{{qyq.content}}</p>
+          <p class="qyq-content ellipsis3">{{qyq.content}}</p>
           <!-- 是否带图片 -->
           <ul class="qyq-pimgs"></ul>
           <!-- 评论 -->

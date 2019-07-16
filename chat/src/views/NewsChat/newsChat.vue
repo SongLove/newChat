@@ -11,7 +11,7 @@
         >
           <img
             class="chat-avater"
-            :src="item.chatWith.avater"
+            v-lazy="item.chatWith.avater"
           />
           <article class="chat-msgbox">
             <p class="chat-name">{{item.chatWith.user_name}}</p>
@@ -45,6 +45,9 @@ export default {
   },
   methods: {
     ...mapMutations(["set_chatList"]),
+    receiveMsg({data}) {
+      
+    },
     getChatList() {
       this.$api
         .sendChatList({ user_id: this.userInfo._id })
