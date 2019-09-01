@@ -12,7 +12,6 @@ import UserSpace from './views/UserSpace/userSpace.vue'
 Vue.use(VueRouter)
 
 let router = new VueRouter({
-  mode: 'history',
   linkActiveClass: 'active',
   routes: [
     { path: '/', name: Home.name, component: Home, meta: { keepAlive: false } },

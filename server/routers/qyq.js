@@ -25,6 +25,10 @@ router.get('/qyqlist', async (ctx, next) => {
   ctx.response.body = responseData
 })
 
+router.get('/', async (ctx, next) => {
+  
+})
+
 // 用户动态列表
 router.get('/tqyqlist', async (ctx, next) => {
   let responseData

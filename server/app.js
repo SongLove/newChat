@@ -110,6 +110,6 @@ io.on('connection', socket => {
   })
 })
 app.use(router.routes())
-server.listen(3300, () => {
+server.listen(config.serverUrl, () => {
   console.log('server listenIng on port: ' + config.serverUrl)
 })

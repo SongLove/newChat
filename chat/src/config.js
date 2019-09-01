@@ -1,7 +1,7 @@
 const isDev = process.env.NODE_ENV === 'production' ? false : true
 
 const config = {
-  API_URL: isDev ? '/api/' : '线上地址',
+  API_URL: isDev ? '/api/' : 'http://www.tanggeek.top/api/',
 }
 
 export default {
@@ -20,5 +20,5 @@ export default {
   withCredentials: false,
   // 返回数据类型
   responseType: 'json',
-  socketUrl: isDev ? 'ws://127.0.0.1:3300' : ''
+  socketUrl: isDev ? 'ws://127.0.0.1:3300' : 'ws://www.tanggeek.top:3300'
 }
