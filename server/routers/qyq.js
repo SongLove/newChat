@@ -26,7 +26,24 @@ router.get('/qyqlist', async (ctx, next) => {
 })
 
 router.get('/', async (ctx, next) => {
-  
+  let responseData
+  await Models['qyq'].find(ctx.query)
+    .populate(['writer', 'comments']).then(res => {
+      console.log('qyq 组合查询', res)
+      if (res) {
+        ctx.response.body = {
+          code: 200,
+          data: res.reverse(),
+          msg: '用户的动态列表'
+        }
+      } else {
+        ctx.response.body = {
+          code: -1,
+          msg: '暂无动态'
+        }
+      }
+    })
+  ctx.response.body = responseData
 })
 
 // 用户动态列表
