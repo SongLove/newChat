@@ -21,6 +21,11 @@ body {
   &.dir-col {
     flex-direction: column;
   }
+  &.fw{
+    flex-wrap: wrap
+
+  }
+  
   &.dir-r {
     flex-direction: row;
   }

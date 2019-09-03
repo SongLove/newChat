@@ -26,43 +26,47 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  name: 'upload',
+  name: "upload",
   data() {
     return {
-      message: '',
+      message: "",
       fileList: [],
       postFileList: [],
       loading: false
-    }
+    };
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(["userInfo"])
   },
   methods: {
     beforeRead(file, detail) {
-      console.log(file, detail, 'beforeRead')
-      return true
+      console.log(file, detail, "beforeRead");
+      file.forEach(item => {
+        this.postFileList.push(item);
+      });
+      return true;
     },
     afterRead(file, detail) {
-      console.log(file, detail, 'afterRead')
-      this.postFileList.push(file.file)
-      return true
+      console.log(this.postFileList, file.file, "afterRead");
+      return true;
     },
     fileDelete(file) {
       // 删除需要上传的数据
       this.postFileList.forEach((item, index) => {
         if (item.name === file.file.name) {
-          this.postFileList.splice(index, 1)
+          this.postFileList.splice(index, 1);
         }
-      })
-      console.log(this.postFileList, 'postFileLists')
+      });
     },
     sendReport() {
-      // 发表
-      let dataFrom = new FormData()
-      dataFrom.append('file', this.postFileList[0])
+      console.log(this.postFileList, "postFileLists");
+      let dataFrom = new FormData();
+      this.postFileList.forEach(item => {
+        console.log(item.name, "item");
+        dataFrom.append("file", item);
+      });
       // dataFrom.append('writer',  this.userInfo._id)
       // dataFrom.append('content', this.message)
       this.$api.sendUpImg(dataFrom).then(({ data }) => {
@@ -70,18 +74,26 @@ export default {
           writer: this.userInfo._id,
           content: this.message,
           uploadImg: data
-        }
-        this.$api.sendUpQyq(obj).then(res => {
-          console.log('发表动态', res)
-        })
-      })
+        };
+        this.$api.sendUpQyq(obj).then(({ msg }) => {
+          this.$toast({
+            duration: 700,
+            message: msg,
+            onClose: () => {
+              this.$router.push({
+                path: "/circle"
+              });
+            }
+          });
+        });
+      });
 
       // this.$api.sendUpQyq(obj).then(res => {
       //   console.log('发表动态', res)
       // })
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

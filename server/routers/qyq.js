@@ -94,4 +94,14 @@ router.post('/qyqcomment', async (ctx, next) => {
   })
 })
 
+// 删除组件的动态
+router.post('/qyqdelete', async (ctx) => {
+  await Models['qyq'].remove(ctx.request.body).then(res => {
+    ctx.response.body = {
+      code: 200,
+      msg: '删除成功'
+    }
+  })
+})
+
 module.exports = router.routes()

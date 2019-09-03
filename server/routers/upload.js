@@ -20,25 +20,31 @@ const uploadFile = async (req) => {
         encoding: 'utf-8',
         keepExtensions: true // 保留后缀
       })
+
       form.parse(req, async function (err, fields, files) {
         let data = []
-        for (let f of files.file) {
-          let date = new Date()
-          let time = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
-          let filepath = 'chat/' + time + '/' + date.getTime()
-          // 文件后缀
-          let [fileext] = [f.originalFilename.split('.').pop(), f.originalFilename.split('.').shift()]
-          let upfile = f.path
-          let newfile = filepath + '.' + fileext
-          client.useBucket('tanggeek')
-          await client.put(newfile, upfile).then((results) => {
-            data.push(results.url)
-          }).catch((err) => {
-            console.log(err)
-          })
+        console.log(files)
+        if (JSON.stringify(files) === '{}') {
+          resolve()
+        } else {
+          for (let f of files.file) {
+            let date = new Date()
+            let time = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
+            let filepath = 'chat/' + time + '/' + date.getTime()
+            // 文件后缀
+            let [fileext] = [f.originalFilename.split('.').pop(), f.originalFilename.split('.').shift()]
+            let upfile = f.path
+            let newfile = filepath + '.' + fileext
+            client.useBucket('tanggeek')
+            await client.put(newfile, upfile).then((results) => {
+              data.push(results.url)
+            }).catch((err) => {
+              console.log(err)
+            })
+          }
+          console.log('文件上传成功!', data)
+          resolve(data)
         }
-        console.log('文件上传成功!', data)
-        resolve(data)
       })
     })
   }
@@ -58,12 +64,12 @@ router.post('/upimg', async (ctx, next) => {
 })
 
 router.post('/upqyq', async (ctx, next) => {
-  let data = await new ModelDB('qyq').save(ctx.request.body)
-  ctx.response.body = {
-    code: 200,
-    data,
-    msg: '成功发表动态'
-  }
+  await new ModelDB('qyq').save(ctx.request.body).then(() => {
+    ctx.response.body = {
+      code: 200,
+      msg: '成功发表动态'
+    }
+  })
 })
 
 module.exports = router.routes()

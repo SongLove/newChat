@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import QyqContent from '../../components/qyqContent'
+import { mapState } from "vuex";
+import QyqContent from "../../components/qyqContent";
 export default {
-  name: 'circle',
+  name: "circlefriends",
   created() {
-    this.getQyqList()
+    this.getQyqList();
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(["userInfo"])
   },
   components: {
     QyqContent
@@ -23,17 +23,18 @@ export default {
   data() {
     return {
       qyqList: []
-    }
+    };
   },
   methods: {
     getQyqList() {
       this.$api.sendQyqList().then(({ data }) => {
-        console.log('动态列表: ', data)
-        this.qyqList = data
-      })
+        console.log("动态列表: ", data);
+        this.qyqList = data;
+        this.$previewRefresh();
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

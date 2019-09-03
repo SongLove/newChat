@@ -59,6 +59,8 @@ const sendUpQyq = data => {
     data
   })
 }
+
+
 // 图片上传
 const sendUpImg = data => {
   return axios({
@@ -74,6 +76,15 @@ const sendQyqList = params => {
     url: '/qyq/qyqlist',
     method: 'get',
     params
+  })
+}
+
+// 删除动态
+const sendDeleteQyq = data => {
+  return axios({
+    url: '/qyq/qyqdelete',
+    method: 'post',
+    data
   })
 }
 
@@ -116,6 +127,7 @@ export default {
   sendUpQyq,
   sendUpImg,
   sendQyqList,
+  sendDeleteQyq,
   sendTQyqList,
   sendChatList,
   sendComment,

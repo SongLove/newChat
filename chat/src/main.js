@@ -13,8 +13,12 @@ import axios from './api'
 import components from './utils/components'
 import Directives from './utils/directives'
 import VueLazyload from 'vue-lazyload'
+import previe from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+
 Vue.use(axios)
 Vue.use(components)
+Vue.use(previe)
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   error: require('./assets/img/error.jpg'),

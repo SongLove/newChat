@@ -16,9 +16,9 @@
           >{{qyq.writer.user_name}}</p>
           <p class="qyq-content ellipsis3">{{qyq.content}}</p>
           <!-- 是否带图片 -->
-          <ul class="qyq-pimgs">
-            <li class="qyq-pimgslist" v-for="(item,index) in qyq.uploadImg" :key="index">
-              <img :src="item"/>
+          <ul class="qyq-pimgs flex fw">
+            <li class="qyq-pimgslist flex ac jc" v-for="(item,index) in qyq.uploadImg" :key="index">
+              <img :src="item" :preview="qyq._id" :preview-text="qyq.content" />
             </li>
           </ul>
           <!-- 评论 -->
@@ -47,7 +47,11 @@
           </ul>
         </div>
         <!--如果是当前用户的动态 显示删除按钮-->
-        <i v-if="qyq.writer._id == userInfo._id" class="iconfont icon-guanbi qyq-close p-ab"></i>
+        <i
+          v-if="qyq.writer._id == userInfo._id"
+          @click="deleteQyq(qyq._id)"
+          class="iconfont icon-guanbi qyq-close p-ab"
+        ></i>
       </div>
       <!-- <loading v-show="loading" /> -->
     </article>
@@ -75,10 +79,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
+import { Dialog } from "vant";
 
 export default {
-  name: 'qyqcontent',
+  name: "qyqcontent",
   props: {
     qyqList: {
       tyep: Array,
@@ -88,66 +93,88 @@ export default {
   data() {
     return {
       showComment: false, // 是否显示评论弹窗
-      replyLab: '', // 回复谁
-      commentContent: '', // 评论或者回复内容
+      replyLab: "", // 回复谁
+      commentContent: "", // 评论或者回复内容
       atQyq: {}, // 当前评论或者回复的数据
       atReply: {}, // 当前回复的数据
       loading: false
-    }
+    };
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(["userInfo"])
   },
   methods: {
+    // 删除动态
+    deleteQyq(qyqid) {
+      Dialog.confirm({
+        title: "消息",
+        message: "请问是否确认删除此消息"
+      })
+        .then(() => {
+          console.log(qyqid)
+          this.$api.sendDeleteQyq({ _id: qyqid }).then(({ msg }) => {
+            this.$toast({
+              duration: 700,
+              message: msg,
+              onClose: () => {
+                this.$emit("afreshQyq");
+              }
+            });
+          });
+        })
+        .catch(() => {
+          // on cancel
+        });
+    },
     /**
      * 评论
      * @param qyq 动态
      * @param reply 为回复内容
      */
     commentQyq(qyq, reply) {
-      this.atQyq = qyq
-      this.atReply = reply
-      this.showComment = true
+      this.atQyq = qyq;
+      this.atReply = reply;
+      this.showComment = true;
       if (reply) {
-        this.replyLab = `回复@${reply.from}`
+        this.replyLab = `回复@${reply.from}`;
       } else {
-        this.replyLab = `评论@${qyq.writer.user_name}`
+        this.replyLab = `评论@${qyq.writer.user_name}`;
       }
     },
     // 提交评论或者回复
     submitCommtent() {
       let obj = {
         from: this.userInfo.user_name, // 来之谁的评论
-        to: this.atReply ? this.atReply.from : '', // 回复谁的评论
+        to: this.atReply ? this.atReply.from : "", // 回复谁的评论
         writer: this.atQyq.writer.user_name, // 这条评论的作者
         content: this.commentContent, // 评论内容
         qyq: this.atQyq._id // 评论的id
-      }
-      console.log(obj)
+      };
+      console.log(obj);
       this.$api.sendComment(obj).then(({ msg }) => {
         this.$toast({
           message: msg,
           duration: 100,
           onClose: () => {
-            this.showComment = false
-            this.commentContent = ''
-            this.$emit('afreshQyq')
+            this.showComment = false;
+            this.commentContent = "";
+            this.$emit("afreshQyq");
           }
-        })
-      })
+        });
+      });
     },
     // 进入用户空间
     goUserSpace(user_id, user_name) {
       this.$router.push({
-        path: '/userspace',
+        path: "/userspace",
         query: {
           user_id,
           user_name
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -155,12 +182,14 @@ export default {
   margin-top: 10px;
   border-bottom: 1px solid #000;
   padding-bottom: 10px;
-  &-pimgs{
-    margin: 10px;
+  &-pimgs {
+    margin: 10px 0;
+    overflow: hidden;
   }
-  &-pimgslist{
-    width: 100px;
+  &-pimgslist {
+    width: 29%;
     height: 100px;
+    margin: 5px;
   }
   &-msgbox {
     width: 100%;
