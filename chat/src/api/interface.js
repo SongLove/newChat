@@ -6,7 +6,7 @@ import axios from './axios' // 倒入 api
  */
 
 // 单独发送聊天记录
-export const sendMessage = data => {
+const sendMessage = data => {
   return axios({
     url: '/chat/chatwith',
     method: 'post',
@@ -16,7 +16,7 @@ export const sendMessage = data => {
 
 
 // 查找当前用户与其用户的聊天记录
-export const sendChatRecord = params => {
+const sendChatRecord = params => {
   return axios({
     url: '/chat/chatrecord',
     method: 'get',
@@ -25,7 +25,7 @@ export const sendChatRecord = params => {
 }
 
 // 查找当前用户的聊天列表
-export const sendChatList = params => {
+const sendChatList = params => {
   return axios({
     url: '/chat/chatlist',
     method: 'get',
@@ -34,7 +34,7 @@ export const sendChatList = params => {
 }
 
 // 用户信息
-export const sendUserInfo = params => {
+const sendUserInfo = params => {
   return axios({
     url: '/profile/userinfo',
     method: 'get',
@@ -43,7 +43,7 @@ export const sendUserInfo = params => {
 }
 
 // 修改用户信息
-export const sendAlterInfo = data => {
+const sendAlterInfo = data => {
   return axios({
     url: '/profile/alterInfo',
     method: 'post',
@@ -52,7 +52,7 @@ export const sendAlterInfo = data => {
 }
 
 // 发表动态
-export const sendUpQyq = data => {
+const sendUpQyq = data => {
   return axios({
     url: '/upload/upqyq',
     method: 'post',
@@ -60,7 +60,7 @@ export const sendUpQyq = data => {
   })
 }
 // 图片上传
-export const sendUpImg = data => {
+const sendUpImg = data => {
   return axios({
     url: '/upload/upimg',
     method: 'post',
@@ -69,7 +69,7 @@ export const sendUpImg = data => {
 }
 
 // 取所有动态 动态大厅
-export const sendQyqList = params => {
+const sendQyqList = params => {
   return axios({
     url: '/qyq/qyqlist',
     method: 'get',
@@ -78,7 +78,7 @@ export const sendQyqList = params => {
 }
 
 // 取所有动态 动态大厅
-export const sendTQyqList = params => {
+const sendTQyqList = params => {
   return axios({
     url: '/qyq/tqyqlist',
     method: 'get',
@@ -88,7 +88,7 @@ export const sendTQyqList = params => {
 
 
 // 评论动态
-export const sendComment = data => {
+const sendComment = data => {
   return axios({
     url: '/qyq/qyqcomment',
     method: 'post',
@@ -96,6 +96,15 @@ export const sendComment = data => {
   })
 }
 
+// 搜索
+// 评论动态
+const sendSearch = params => {
+  return axios({
+    url: '/search',
+    method: 'get',
+    params
+  })
+}
 
 // 默认全部倒出
 // 根绝需要进行  
@@ -109,5 +118,6 @@ export default {
   sendQyqList,
   sendTQyqList,
   sendChatList,
-  sendComment
+  sendComment,
+  sendSearch
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <scroll>
     <article>
       <div v-for="(qyq, index) in qyqList" :key="index" class="qyq flex dir-row p-r">
         <!-- 头像 -->
@@ -16,7 +16,11 @@
           >{{qyq.writer.user_name}}</p>
           <p class="qyq-content ellipsis3">{{qyq.content}}</p>
           <!-- 是否带图片 -->
-          <ul class="qyq-pimgs"></ul>
+          <ul class="qyq-pimgs">
+            <li class="qyq-pimgslist" v-for="(item,index) in qyq.uploadImg" :key="index">
+              <img :src="item"/>
+            </li>
+          </ul>
           <!-- 评论 -->
           <div class="qyq-interact flex jb ac">
             <span>{{qyq.addTime}}</span>
@@ -48,7 +52,12 @@
       <!-- <loading v-show="loading" /> -->
     </article>
     <!-- 评论内容 -->
-    <!-- <van-popup v-model="showComment" position="bottom" :style="{ height: '20%' }">
+    <van-popup
+      v-model="showComment"
+      class="qyq-comment"
+      position="bottom"
+      :style="{ height: '18%' }"
+    >
       <van-cell-group>
         <van-field
           v-model="commentContent"
@@ -61,8 +70,8 @@
           <van-button slot="button" size="small" @click="submitCommtent" type="primary">发 送</van-button>
         </van-field>
       </van-cell-group>
-    </van-popup> -->
-  </div>
+    </van-popup>
+  </scroll>
 </template>
 
 <script>
@@ -121,6 +130,7 @@ export default {
           duration: 100,
           onClose: () => {
             this.showComment = false
+            this.commentContent = ''
             this.$emit('afreshQyq')
           }
         })
@@ -145,6 +155,13 @@ export default {
   margin-top: 10px;
   border-bottom: 1px solid #000;
   padding-bottom: 10px;
+  &-pimgs{
+    margin: 10px;
+  }
+  &-pimgslist{
+    width: 100px;
+    height: 100px;
+  }
   &-msgbox {
     width: 100%;
   }
@@ -167,6 +184,8 @@ export default {
   &-interact {
     font-size: $msgSize;
     margin: 5px 0;
+  }
+  &-comment {
   }
   &-commentlist {
     width: 100%;

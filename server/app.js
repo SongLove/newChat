@@ -27,6 +27,7 @@ router.use('/upload', require('./routers/upload'))
 router.use('/chat', require('./routers/chat'))
 router.use('/profile', require('./routers/profile'))
 router.use('/qyq', require('./routers/qyq'))
+router.use('/search', require('./routers/search'))
 
 
 const io = require('socket.io')(server)

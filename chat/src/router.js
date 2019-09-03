@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home/home.vue'
+import Circle from './views/Circle/circle.vue'
 import NewsChat from './views/NewsChat/newsChat.vue'
 import Chat from './views/NewsChat/chat.vue'
 import Upload from './views/Upload/upload.vue'
@@ -15,9 +16,10 @@ let router = new VueRouter({
   linkActiveClass: 'active',
   routes: [
     { path: '/', name: Home.name, component: Home, meta: { keepAlive: false } },
+    { path: '/circle', name: Circle.name, component: Circle, meta: { keepAlive: true } },
     { path: '/news', name: NewsChat.name, component: NewsChat, meta: { keepAlive: false } },
     { path: '/upload', name: Upload.name, component: Upload, meta: { keepAlive: true } },
-    { path: '/search', name: Search.name, component: Search, meta: { keepAlive: false } },
+    { path: '/search', name: Search.name, component: Search, meta: { keepAlive: true } },
     { path: '/mypage', name: MyPage.name, component: MyPage, meta: { keepAlive: false } },
     { path: '/login', name: Login.name, component: Login, meta: { keepAlive: true } },
     { path: '/chat', name: Chat.name, component: Chat, meta: { keepAlive: true } },
