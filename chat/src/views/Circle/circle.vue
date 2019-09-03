@@ -30,7 +30,6 @@ export default {
       this.$api.sendQyqList().then(({ data }) => {
         console.log("动态列表: ", data);
         this.qyqList = data;
-        this.$previewRefresh();
       });
     }
   }

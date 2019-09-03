@@ -16,7 +16,6 @@
       @delete="fileDelete"
       accept="image/*"
       class="field-imglist"
-      capture="camera"
       v-model="fileList"
       multiple
       :max-count="9"
@@ -42,7 +41,11 @@ export default {
   },
   methods: {
     beforeRead(file, detail) {
-      console.log(file, detail, "beforeRead");
+      console.log(file.length, detail, "beforeRead");
+      if (!file.length){
+        this.postFileList.push(file);
+        return true
+      }
       file.forEach(item => {
         this.postFileList.push(item);
       });

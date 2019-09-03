@@ -90,6 +90,12 @@ export default {
       default: []
     }
   },
+  watch: {
+    qyqList(val) {
+      console.log(val,'bian')
+      this.$previewRefresh();
+    }
+  },
   data() {
     return {
       showComment: false, // 是否显示评论弹窗
@@ -111,7 +117,7 @@ export default {
         message: "请问是否确认删除此消息"
       })
         .then(() => {
-          console.log(qyqid)
+          console.log(qyqid);
           this.$api.sendDeleteQyq({ _id: qyqid }).then(({ msg }) => {
             this.$toast({
               duration: 700,
