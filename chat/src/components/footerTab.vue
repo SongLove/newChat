@@ -13,8 +13,9 @@
       <span>朋友圈</span>
     </router-link>
     <router-link class="link" tag="li" to="/news">
-      <span>
+      <span class="p-re">
         <i class="iconfont icon-liulanzhaopianyechakanxiangqing"></i>
+        <i v-if="newMsg" class="dian p-ab"></i>
       </span>
       <span>消息</span>
     </router-link>
@@ -38,8 +39,13 @@
   </ul>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'footertab'
+  name: 'footertab',
+  computed: {
+    ...mapState(['newMsg'])
+  }
 }
 </script>
 
@@ -53,6 +59,15 @@ export default {
   border-top: 1px solid #ddd;
   background: #fff;
   z-index: 10;
+  .dian {
+    width: 10px;
+    height: 10px;
+    right: 10px;
+    top: -5px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #f00;
+  }
   .link {
     width: 20%;
     height: 100%;

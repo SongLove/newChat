@@ -109,6 +109,29 @@ io.on('connection', socket => {
       })
     })
   })
+
+  // 监听用户已读消息
+  socket.on('read', async (obj) => {
+    const { readAll, read_id } = obj
+    if (readAll) {
+      let data = await new ModelDB('chatcontent').find({ unread: false })
+      data.forEach(item => {
+        new ModelDB('chatcontent').updateOne({ unread: false }, { unread: true })
+      })
+      return
+    }
+    await new ModelDB('chatcontent').query({ _id: read_id }).then(res => {
+      console.log('找到的需要已读的消息', res)
+      if (res) {
+        new ModelDB('chatcontent').updateOne({ _id: res._id }, { unread: true })
+      }
+    })
+    socket.emit('message', {
+      cmd: 'readend',
+      code: 200,
+      msg: '已读成功'
+    })
+  })
 })
 app.use(router.routes())
 server.listen(config.serverUrl, () => {

@@ -4,6 +4,7 @@ import { Toast } from 'vant'
 
 export default function $axios(options) {
   return new Promise((resolve, reject) => {
+    Toast.loading({duration:0})
     const instance = axios.create({
       baseURL: config.baseURL
     }
@@ -145,6 +146,7 @@ export default function $axios(options) {
     instance(options)
       .then((res) => {
         let { data, code, msg } = typeof res === 'object' && res ? res : JSON.parse(res)
+        Toast.clear()
         resolve({ data, code, msg })
         return false
       })

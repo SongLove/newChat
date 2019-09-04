@@ -17,7 +17,7 @@ let router = new VueRouter({
   routes: [
     { path: '/', name: Home.name, component: Home, meta: { keepAlive: false } },
     { path: '/circle', name: Circle.name, component: Circle, meta: { keepAlive: true } },
-    { path: '/news', name: NewsChat.name, component: NewsChat, meta: { keepAlive: false } },
+    { path: '/news', name: NewsChat.name, component: NewsChat, meta: { keepAlive: true } },
     { path: '/upload', name: Upload.name, component: Upload, meta: { keepAlive: true } },
     { path: '/search', name: Search.name, component: Search, meta: { keepAlive: true } },
     { path: '/mypage', name: MyPage.name, component: MyPage, meta: { keepAlive: false } },

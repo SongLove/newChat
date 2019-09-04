@@ -1,14 +1,18 @@
 <template>
   <div class="chatbox">
     <head-tab :title="$route.query.chatwith" @back="back" :back="true">
-      <div slot="headright">右边</div>
+      <div slot="headright"></div>
     </head-tab>
     <div class="chatbox-content">
       <scroll ref="scroll" :data="dataList" :scrollToEndFlag="true">
         <div id="chat-messages">
           <template v-for="(item, index) in dataList">
             <template v-if="colConf[index]">
-              <div class="message right" :key="index">
+              <div
+                v-space="[item.user_id._id, item.user_id.user_name]"
+                class="message right"
+                :key="index"
+              >
                 <img :src="item.user_id.avater" />
                 <div class="bubble">
                   {{item.content}}
@@ -19,7 +23,10 @@
             </template>
             <template v-else>
               <div class="message left" :key="index">
-                <img :src="item.chatwith_id.avater" />
+                <img
+                  v-space="[item.chatwith_id._id, item.chatwith_id.user_name]"
+                  :src="item.chatwith_id.avater"
+                />
                 <div class="bubble">
                   {{item.content}}
                   <div class="corner"></div>
@@ -39,13 +46,15 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Socket from '../../utils/socket'
+import { truncate } from 'fs'
 export default {
   name: 'chat',
   created() {
     this.gettUserInfo()
     Socket.Instance.on('receiveMsg', this.receiveMsg)
+    Socket.Instance.on('readend', this.readend)
   },
   computed: {
     ...mapState(['userInfo']),
@@ -64,12 +73,27 @@ export default {
       msgInp: ''
     }
   },
+  mounted() {
+    // 发送已读
+    Socket.Instance.send({
+      cmd: 'read',
+      param: {
+        readAll: true
+      }
+    })
+  },
   methods: {
+    ...mapMutations(['set_newMsg']),
     back() {
       this.$router.go(-1)
     },
+
+    readend(data) {
+      console.log('已读', data)
+    },
     // 接收别人发过来的消息
     receiveMsg({ data, msg }) {
+      this.set_newMsg(true)
       console.log('发过过来的消息：', data, msg)
       let This = this
       this.dataList.push({
@@ -79,33 +103,43 @@ export default {
         addTime: data.addTime,
         unread: true
       })
+      // 发送已读
+      Socket.Instance.send({
+        cmd: 'read',
+        param: {
+          read_id: data._id
+        }
+      })
     },
     sendCat() {
       let obj = {
         chatwith_id: this.tUserInfo._id,
         user_id: this.userInfo._id,
-        content: this.msgInp
+        content: this.msgInp,
+        unread: false
       }
 
       this.$api.sendMessage(obj).then(({ data }) => {
         // 发送成功之后，向对方推送消息
-        let This = this
-        this.dataList.push({
-          user_id: This.userInfo,
-          chatwith_id: This.tUserInfo,
+        let pushData = {
+          user_id: this.userInfo,
+          chatwith_id: this.tUserInfo,
           content: data.content,
           addTime: data.addTime,
           unread: data.unread
-        })
+        }
+        this.dataList.push(pushData)
         console.log(this.$refs.scroll)
+
         Socket.Instance.send({
           cmd: 'chat',
           param: {
             from_user: this.userInfo.user_name,
             to_user: this.tUserInfo.user_name,
             avater: this.userInfo.avater,
-            _id: this.userInfo._id,
-            content: this.msgInp
+            _id: data._id,
+            content: this.msgInp,
+            unread: false
           }
         })
 
@@ -135,8 +169,11 @@ export default {
       })
     }
   },
-  deactivated() {
+  destroyed() {
+    console.log('删除')
     this.dataList = []
+    Socket.Instance.off('readend', this.readend)
+    Socket.Instance.off('receiveMsg', this.receiveMsg)
   }
 }
 </script>

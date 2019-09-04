@@ -7,6 +7,9 @@ const mutations = {
   },
   [types.SET_CHATLIST](state, chatList) {
     state.chatList = chatList
+  },
+  [types.SET_NEWMSG](state, msg) {
+    state.newMsg = msg
   }
 }
 

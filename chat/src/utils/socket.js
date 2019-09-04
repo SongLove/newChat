@@ -87,6 +87,9 @@ class Socket {
       if (msg === 1) {
         this._socket.send(1)
       } else {
+        console.group('send server msg')
+        console.log(msg.cmd, msg.param)
+        console.groupEnd('send server msg')
         this._socket.emit(msg.cmd, msg.param)
         // if (now - this.lastTime > 700) {
         //   Toast.loading({ duration: 0 })

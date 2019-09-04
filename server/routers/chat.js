@@ -130,11 +130,16 @@ router.get('/chatList', async (ctx, next) => {
         if (res) {
           let responseData
           let dataArr = []
+          let unreadCount = 0
           res.forEach(item => {
+            // 未读数量
             let oneItem = item.chatContent[0]
+            item.chatContent.forEach(i => {
+              if (!i.unread) unreadCount++
+            })
             console.log('oneItem', oneItem.chatwith_id, oneItem.user_id, oneItem.chatwith_id._id, user_id)
             let userWith
-            if (oneItem.chatwith_id._id == user_id ) {
+            if (oneItem.chatwith_id._id == user_id) {
               userWith = oneItem.user_id
             } else {
               userWith = oneItem.chatwith_id
@@ -143,9 +148,10 @@ router.get('/chatList', async (ctx, next) => {
               addTime: oneItem.addTime,
               chatWith: userWith,
               content: oneItem.content,
-              unread: oneItem.unread,
+              unreadCount
             }
             dataArr.push(responseData)
+            unreadCount = 0
           })
 
           ctx.response.body = {
