@@ -45,13 +45,15 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'footertab',
   computed: {
-    ...mapState(['newMsg'])
+    ...mapState(['newMsg', 'userInfo'])
   },
   mounted() {
     Socket.Instance.on('receiveMsg', this.receiveMsg)
   },
   methods: {
-    receiveMsg() {
+    receiveMsg({ data }) {
+      // 如果不是自己的id 则不请求
+      console.log(d, 'fooo')
       this.set_newMsg(true)
     },
     ...mapMutations(['set_newMsg'])
