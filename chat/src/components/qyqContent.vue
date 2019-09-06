@@ -12,18 +12,23 @@
         <div class="qyq-msgbox">
           <p
             v-space="[qyq.writer._id, qyq.writer.user_name]"
-            class="qyq-name ellipsis"
+            class="qyq-name atc ellipsis"
           >{{qyq.writer.user_name}}</p>
           <p class="qyq-content ellipsis3">{{qyq.content}}</p>
           <!-- 是否带图片 -->
           <ul class="qyq-pimgs flex fw">
             <li class="qyq-pimgslist flex ac jc" v-for="(item,index) in qyq.uploadImg" :key="index">
-              <img :src="item" :preview="qyq._id" :preview-text="qyq.content" />
+              <img
+                :src="item"
+                :preview="qyq._id"
+                v-lazy="item"
+                :preview-text="qyq.content"
+              />
             </li>
           </ul>
           <!-- 评论 -->
           <div class="qyq-interact flex jb ac">
-            <span>{{qyq.addTime}}</span>
+            <span>{{qyq.addTime | fomatTime}}</span>
             <span class="comment" @click="commentQyq(qyq)">评论</span>
           </div>
           <!-- 评论列表 -->
@@ -198,6 +203,7 @@ export default {
   }
   &-name {
     font-size: $nameSize;
+    width: 80%;
     margin-bottom: 5px;
   }
   &-content {

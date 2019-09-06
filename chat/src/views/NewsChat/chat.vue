@@ -8,30 +8,31 @@
         <div id="chat-messages">
           <template v-for="(item, index) in dataList">
             <template v-if="colConf[index]">
-              <div
-                v-space="[item.user_id._id, item.user_id.user_name]"
-                class="message right"
-                :key="index"
-              >
-                <img :src="item.user_id.avater" />
+              <div class="message right" :key="index">
+                <img
+                  v-space="[item.user_id._id, item.user_id.user_name]"
+                  :name="item.user_id.user_name"
+                  :src="item.user_id.avater"
+                />
                 <div class="bubble">
                   {{item.content}}
                   <div class="corner"></div>
-                  <span>{{item.addTime}}</span>
                 </div>
+                <span>{{item.addTime | normalTimeFilter}}</span>
               </div>
             </template>
             <template v-else>
               <div class="message left" :key="index">
                 <img
-                  v-space="[item.chatwith_id._id, item.chatwith_id.user_name]"
+                  v-space="[item.user_id._id, item.user_id.user_name]"
+                  :name="item.user_id.user_name"
                   :src="item.chatwith_id.avater"
                 />
                 <div class="bubble">
                   {{item.content}}
                   <div class="corner"></div>
-                  <span>{{item.addTime}}</span>
                 </div>
+                <span>{{item.addTime | normalTimeFilter}}</span>
               </div>
             </template>
           </template>
@@ -222,18 +223,23 @@ export default {
   visibility: hidden;
 }
 #chat-messages div.message {
+  position: relative;
   clear: both;
   margin-top: 10px;
   padding-bottom: 30px;
 }
 
-#chat-messages div.message.right {
+#chat-messages div.message.right span {
+  right: 65px;
 }
-#chat-messages div.message.right .bubble span {
-  right: 0;
+#chat-messages div.message.left span {
+  left: 65px;
 }
-#chat-messages div.message.left .bubble span {
-  left: 0;
+#chat-messages div.message span {
+  color: #aab8c2;
+  font-size: 11px;
+  position: absolute;
+  bottom: 10px;
 }
 
 #chat-messages .message img {
@@ -241,7 +247,7 @@ export default {
   border-radius: 50%;
   width: 45px;
   height: 45px;
-  margin: 20px 10px 0 10px;
+  margin: 0 10px;
 }
 
 #chat-messages div.message.right img {
@@ -249,11 +255,11 @@ export default {
 }
 
 .message .bubble {
-  background: #ddd;
+  background: #f0f4f7;
   font-size: 13px;
   font-weight: 600;
   padding: 12px 13px;
-  border-radius: 5px 5px 5px 0;
+  border-radius: 0px 5px 5px 5px;
   color: #8495a3;
   position: relative;
   float: left;
@@ -262,7 +268,7 @@ export default {
 
 #chat-messages div.message.right .bubble {
   float: right;
-  border-radius: 5px 5px 0 5px;
+  border-radius: 5px 0px 5px 5px;
 }
 #chat-messages div.message.right .bubble::after {
   content: ' ';
@@ -277,19 +283,15 @@ export default {
   width: 7px;
   height: 7px;
   left: -5px;
-  bottom: 0;
+  top: 0px;
+  @include bgImage('bubble');
+  transform: rotate(180deg);
 }
 
 div.message.right .corner {
   left: auto;
   right: -5px;
-}
-
-.bubble span {
-  color: #aab8c2;
-  font-size: 11px;
-  position: absolute;
-  bottom: -22px;
+  transform: rotate(90deg);
 }
 
 #sendmessage {

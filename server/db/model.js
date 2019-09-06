@@ -34,7 +34,7 @@ const chatContentSchema = new Schema({
   },
   addTime: {
     type: Date,
-    default: new Date().getTime()
+    default: Date.now
   },
   // 此次消息内容
   content: {
@@ -80,7 +80,7 @@ const qyqSchema = new Schema({
   content: String,
   addTime: {
     type: Date,
-    default: new Date().getTime()
+    default: Date.now
   },
   uploadImg: { // 图片
     type: Array,
@@ -108,7 +108,7 @@ const commentSchema = new Schema({
   },
   addTime: {
     type: Date,
-    default: new Date().getTime()
+    default: Date.now
   }
 })
 

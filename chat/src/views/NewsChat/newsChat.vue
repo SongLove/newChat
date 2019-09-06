@@ -7,14 +7,23 @@
           v-for="(item, index) in chatList"
           @click="goChatRecord(item)"
           :key="index"
-          class="chat p-re flex ac jb dir-r"
+          class="chat p-re flex jb dir-r"
         >
           <img class="chat-avater" v-lazy="item.chatWith.avater" />
           <article class="chat-msgbox">
             <p class="chat-name">{{item.chatWith.user_name}}</p>
-            <p class="chat-msg">{{item.content}}</p>
+            <div class="chat-msg flex ac jb">
+              <div>{{item.content}}</div>
+              <div>{{item.addTime | weekTime}}</div>
+            </div>
           </article>
-          <van-tag size="medium" class="chat-status p-ab" round v-show="item.unreadCount" type="danger">{{item.unreadCount}}</van-tag>
+          <van-tag
+            size="medium"
+            class="chat-status p-ab"
+            round
+            v-show="item.unreadCount"
+            type="danger"
+          >{{item.unreadCount}}</van-tag>
         </div>
       </div>
     </scroll>
@@ -69,8 +78,10 @@ export default {
 .chat {
   width: 100%;
   padding: 10px 0;
-  &-status{
+  &-status {
+    display: block;
     right: 0;
+    padding: 1px 4px;
     top: 15px;
   }
   &-avater {
@@ -81,6 +92,7 @@ export default {
   }
   &-name {
     font-size: $nameSize;
+    width: 80%;
     margin-bottom: 5px;
   }
   &-msgbox {
@@ -89,7 +101,11 @@ export default {
   &-msg {
     padding-bottom: 5px;
     font-size: $msgSize;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #f0f4f7;
+    .ellipsis2{
+      display: inline-block;
+      width: 80%;
+    }
   }
 }
 </style>

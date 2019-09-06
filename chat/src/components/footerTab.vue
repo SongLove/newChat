@@ -39,12 +39,22 @@
   </ul>
 </template>
 <script>
-import { mapState } from 'vuex'
+import Socket from '../utils/socket'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'footertab',
   computed: {
     ...mapState(['newMsg'])
+  },
+  mounted() {
+    Socket.Instance.on('receiveMsg', this.receiveMsg)
+  },
+  methods: {
+    receiveMsg() {
+      this.set_newMsg(true)
+    },
+    ...mapMutations(['set_newMsg'])
   }
 }
 </script>

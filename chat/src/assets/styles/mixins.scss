@@ -9,3 +9,8 @@
     -webkit-box-orient: vertical;
   }
 }
+/* 背景图片 */
+@mixin bgImage($url, $size: 100% 100%, $ext: 'png') {
+  background: url('~@/assets/img/#{$url}.#{$ext}') no-repeat;
+  background-size: $size;
+}
