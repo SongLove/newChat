@@ -159,7 +159,7 @@ export default {
     getChatRecord() {
       // 查找当前用户与其用户的聊天记录
       let obj = {
-        chatwith_id: this.$route.query.chatwithid,
+        chatwith_id: this.$route.query.chatwithid, 
         user_id: this.userInfo._id
       }
       this.$api.sendChatRecord(obj).then(({ data }) => {
