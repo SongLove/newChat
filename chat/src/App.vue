@@ -6,7 +6,7 @@
     <transition name="slide">
       <router-view v-if="$route.meta.keepAlive" class="content" />
     </transition>
-    <footer-tab />
+    <footer-tab v-if="!$route.meta.keepAlive" />
   </div>
 </template>
 

@@ -20,14 +20,19 @@
     <!-- 查找到的内容 -->
     <div v-show="showBack" class="search-seekout">
       <ul>
-        <li class="search-user-list" v-for="(item, index) in searchList" :key="index">
+        <li
+          class="search-user-list"
+          v-for="(item, index) in searchList"
+          :key="index"
+          v-space="[item._id, item.user_name]"
+        >
           <div class="flex ac" v-if="searchType === 'user'">
             <div class="search-user-avater">
               <img :src="item.avater" />
             </div>
             <div class="search-user-name">{{item.user_name}}</div>
           </div>
-          <div class="flex ac" v-if="searchType === 'circle'">
+          <div class="search-circle" v-if="searchType === 'circle'">
             <div class="search-user-avater">
               <img :src="item.writer.avater" />
             </div>
@@ -46,6 +51,11 @@
           @click="changeType(item)"
         >{{item.name}}</li>
       </ul>
+    </div>
+    <!-- 朋友圈搜索条件 -->
+    <div v-if="searchType === 'circle'" class="search-circle-condition flex ac jc">
+      <span>发布人</span>
+      <span>发布时间</span>
     </div>
     <div v-show="searchLoading && firstSearch" class="flex ac jc">
       <van-loading color="#1989fa" />
@@ -77,6 +87,7 @@ export default {
       this.typeName = '搜索'
       this.searchList = []
       this.msgInp = ''
+      this.searchType = ''
     },
     /**
      * 切换搜索类型
@@ -112,6 +123,17 @@ export default {
   z-index: 12;
   background: #ddd;
   font-size: $msgSize;
+  &-circle {
+    &-condition {
+      background: #fff;
+      padding: 10px 0;
+      span{
+        flex: 1;
+        text-align: center;
+        font-size: $msgSize;
+      }
+    }
+  }
   &-seekout {
     width: 100%;
     height: auto;

@@ -36,15 +36,15 @@ router.post('/chatwith', async (ctx, next) => {
     await chatrelation.updateOne({
       _id: res._id
     }, {
-        chatContent
-      }).then(() => {
-        console.log('跟新完成')
-        responseData = {
-          code: 200,
-          data: newContent,
-          msg: '更新完成'
-        }
-      })
+      chatContent
+    }).then(() => {
+      console.log('跟新完成')
+      responseData = {
+        code: 200,
+        data: newContent,
+        msg: '更新完成'
+      }
+    })
   } else {
     await chatrelation.save({
       userA: user_id,
@@ -134,16 +134,18 @@ router.get('/chatList', async (ctx, next) => {
           res.forEach(item => {
             // 未读数量
             let oneItem = item.chatContent[0]
-            item.chatContent.forEach(i => {
-              if (!i.unread) unreadCount++
-            })
             console.log('oneItem', oneItem.chatwith_id, oneItem.user_id, oneItem.chatwith_id._id, user_id)
             let userWith
+            // 如果当前消息发的用户id  不是当前登录id 就代表当前用户是接收方
             if (oneItem.chatwith_id._id == user_id) {
               userWith = oneItem.user_id
+              item.chatContent.forEach(i => {
+                if (!i.unread) unreadCount++
+              })
             } else {
               userWith = oneItem.chatwith_id
             }
+
             responseData = {
               addTime: oneItem.addTime,
               chatWith: userWith,
@@ -166,13 +168,6 @@ router.get('/chatList', async (ctx, next) => {
           }
         }
       })
-})
-
-router.get('/mock', async (ctx, next) => {
-  console.log('mock', ctx.query)
-  ctx.response.body = {
-    ddd: 'ssss'
-  }
 })
 
 module.exports = router.routes()

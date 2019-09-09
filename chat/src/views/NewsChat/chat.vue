@@ -55,7 +55,6 @@ export default {
   created() {
     this.gettUserInfo()
     Socket.Instance.on('receiveMsg', this.receiveMsg)
-    Socket.Instance.on('readend', this.readend)
   },
   computed: {
     ...mapState(['userInfo']),
@@ -74,23 +73,10 @@ export default {
       msgInp: ''
     }
   },
-  mounted() {
-    // 发送已读
-    Socket.Instance.send({
-      cmd: 'read',
-      param: {
-        readAll: true
-      }
-    })
-  },
   methods: {
     ...mapMutations(['set_newMsg']),
     back() {
       this.$router.go(-1)
-    },
-
-    readend(data) {
-      console.log('已读', data)
     },
     // 接收别人发过来的消息
     receiveMsg({ data, msg }) {
@@ -108,7 +94,9 @@ export default {
       Socket.Instance.send({
         cmd: 'read',
         param: {
-          read_id: data._id
+          read_id: data._id,
+          user_id: This.userInfo._id,
+          chatwith_id: This.tUserInfo._id
         }
       })
     },
@@ -159,21 +147,27 @@ export default {
     getChatRecord() {
       // 查找当前用户与其用户的聊天记录
       let obj = {
-        chatwith_id: this.$route.query.chatwithid, 
+        chatwith_id: this.$route.query.chatwithid,
         user_id: this.userInfo._id
       }
       this.$api.sendChatRecord(obj).then(({ data }) => {
         console.log('全部聊天记录', data)
         if (data) {
           this.dataList = data.reverse()
+          Socket.Instance.send({
+            cmd: 'read',
+            param: {
+              readAll: true,
+              user_id: this.userInfo._id,
+              chatwith_id: this.tUserInfo._id
+            }
+          })
         }
       })
     }
   },
   destroyed() {
-    console.log('删除')
     this.dataList = []
-    Socket.Instance.off('readend', this.readend)
     Socket.Instance.off('receiveMsg', this.receiveMsg)
   }
 }

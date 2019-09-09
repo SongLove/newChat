@@ -2,61 +2,62 @@
   <scroll>
     <article>
       <div v-for="(qyq, index) in qyqList" :key="index" class="qyq flex dir-row p-r">
-        <!-- 头像 -->
-        <img
-          v-space="[qyq.writer._id, qyq.writer.user_name]"
-          class="qyq-avater"
-          v-lazy="qyq.writer.avater"
-        />
-        <!-- 动态内容 -->
-        <div class="qyq-msgbox">
-          <p
+        <van-skeleton title avatar :row="3" style="width: 100%" :loading="loading" >
+          <!-- 头像 -->
+          <img
             v-space="[qyq.writer._id, qyq.writer.user_name]"
-            class="qyq-name atc ellipsis"
-          >{{qyq.writer.user_name}}</p>
-          <p class="qyq-content ellipsis3">{{qyq.content}}</p>
-          <!-- 是否带图片 -->
-          <ul class="qyq-pimgs flex fw">
-            <li class="qyq-pimgslist flex ac jc" v-for="(item,index) in qyq.uploadImg" :key="index">
-              <img
-                :src="item"
-                :preview="qyq._id"
-                v-lazy="item"
-                :preview-text="qyq.content"
-              />
-            </li>
-          </ul>
-          <!-- 评论 -->
-          <div class="qyq-interact flex jb ac">
-            <span>{{qyq.addTime | fomatTime}}</span>
-            <span class="comment" @click="commentQyq(qyq)">评论</span>
+            class="qyq-avater"
+            v-lazy="qyq.writer.avater"
+          />
+          <!-- 动态内容 -->
+          <div class="qyq-msgbox">
+            <p
+              v-space="[qyq.writer._id, qyq.writer.user_name]"
+              class="qyq-name atc ellipsis"
+            >{{qyq.writer.user_name}}</p>
+            <p class="qyq-content ellipsis3">{{qyq.content}}</p>
+            <!-- 是否带图片 -->
+            <ul class="qyq-pimgs flex fw">
+              <li
+                class="qyq-pimgslist flex ac jc"
+                v-for="(item,index) in qyq.uploadImg"
+                :key="index"
+              >
+                <img :src="item" :preview="qyq._id" v-lazy="item" :preview-text="qyq.content" />
+              </li>
+            </ul>
+            <!-- 评论 -->
+            <div class="qyq-interact flex jb ac">
+              <span>{{qyq.addTime | fomatTime}}</span>
+              <span class="comment" @click="commentQyq(qyq)">评论</span>
+            </div>
+            <!-- 评论列表 -->
+            <ul class="qyq-commentlist" v-for="(comment, index) in qyq.comments" :key="index">
+              <li @click="commentQyq(qyq, comment)">
+                <!-- 评论 -->
+                <div v-if="!comment.to">
+                  <span class="qyq-commentlist-name namecolor">{{comment.from}}：</span>
+                  <span class="qyq-commentlist-conent">{{comment.content}}</span>
+                </div>
+                <!-- 回复 -->
+                <div v-else>
+                  <span class="qyq-commentlist-name">
+                    <span class="namecolor">{{comment.from}}</span>
+                    回复
+                    <span class="namecolor">{{comment.to}}：</span>
+                  </span>
+                  <span class="qyq-commentlist-conent">{{comment.content}}</span>
+                </div>
+              </li>
+            </ul>
           </div>
-          <!-- 评论列表 -->
-          <ul class="qyq-commentlist" v-for="(comment, index) in qyq.comments" :key="index">
-            <li @click="commentQyq(qyq, comment)">
-              <!-- 评论 -->
-              <div v-if="!comment.to">
-                <span class="qyq-commentlist-name namecolor">{{comment.from}}：</span>
-                <span class="qyq-commentlist-conent">{{comment.content}}</span>
-              </div>
-              <!-- 回复 -->
-              <div v-else>
-                <span class="qyq-commentlist-name">
-                  <span class="namecolor">{{comment.from}}</span>
-                  回复
-                  <span class="namecolor">{{comment.to}}：</span>
-                </span>
-                <span class="qyq-commentlist-conent">{{comment.content}}</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <!--如果是当前用户的动态 显示删除按钮-->
-        <i
-          v-if="qyq.writer._id == userInfo._id"
-          @click="deleteQyq(qyq._id)"
-          class="iconfont icon-guanbi qyq-close p-ab"
-        ></i>
+          <!--如果是当前用户的动态 显示删除按钮-->
+          <i
+            v-if="qyq.writer._id == userInfo._id"
+            @click="deleteQyq(qyq._id)"
+            class="iconfont icon-guanbi qyq-close p-ab"
+          ></i>
+        </van-skeleton>
       </div>
       <!-- <loading v-show="loading" /> -->
     </article>

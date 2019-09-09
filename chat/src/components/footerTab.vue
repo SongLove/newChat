@@ -53,7 +53,7 @@ export default {
   methods: {
     receiveMsg({ data }) {
       // 如果不是自己的id 则不请求
-      console.log(d, 'fooo')
+      console.log(data, 'fooo')
       this.set_newMsg(true)
     },
     ...mapMutations(['set_newMsg'])
