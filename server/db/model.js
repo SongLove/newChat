@@ -7,7 +7,7 @@ const userSchema = new Schema({
   pass_word: String,
   avater: {
     type: String,
-    default: 'http://www.tanggeek.top/chat/24.png'
+    default: 'http://systatic.tanggeek.top/chat/24.png'
   },
   cover: {
     type: String,

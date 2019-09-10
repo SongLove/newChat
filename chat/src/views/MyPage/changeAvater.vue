@@ -36,7 +36,7 @@ export default {
     // },
     clipperImgWidth: {
       type: Number,
-      default: 500
+      default: 200
     },
     clipperImgHeight: {
       type: Number,
@@ -498,7 +498,7 @@ export default {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      border: 2px solid #fff;
+      border: 2px solid #ff0;
     }
   }
   .action-bar {

@@ -1,7 +1,7 @@
 const isDev = process.env.NODE_ENV === 'development' ? true : false
 
 const config = {
-  API_URL: isDev ? '/api/' : 'http://www.tanggeek.top/chat/api/',
+  API_URL: isDev ? '/api/' : 'http://chat.tanggeek.top/chat/api/',
 }
 
 export default {
