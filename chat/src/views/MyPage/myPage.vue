@@ -13,8 +13,10 @@
       </div>
     </div>
     <div v-else>
-      <van-cell title="头像" is-link @click="changeAvater">
-        <img class="user-avater" :src="userInfo.avater"/>
+      <van-cell title="头像" is-link>
+        <img class="user-avater" :src="userInfo.avater" />
+        <!-- <van-uploader :after-read="afterRead" :max-count="1"  v-model="fileAvater" /> -->
+        <input type="file" ref="file" @change="afterRead" accept="image/*" />
       </van-cell>
       <van-cell title="名字" is-link :value="userInfo.user_name" />
       <van-cell
@@ -37,17 +39,22 @@
         <van-field v-model="alterValueEnd" type="textarea" :focus="alterFocus" class="aa" autosize />
       </van-cell-group>
     </van-popup>
-    <router-view />
+    <!-- <avater v-if="fileAvater" :img="fileAvater" /> -->
+    <router-view @ok="ok" @cancel="cancel" />
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
 import { Dialog } from 'vant'
+import Avater from './changeAvater'
 export default {
   name: 'mypage',
   computed: {
     ...mapState(['userInfo'])
+  },
+  components: {
+    Avater
   },
   data() {
     return {
@@ -56,10 +63,85 @@ export default {
       alterValue: '', // 修改内容
       alterName: '', // 需要修改的字段
       alterValueEnd: '', //修改后的内容
+      fileAvater: '',
       alterFocus: false // 选中
     }
   },
+  // watch: {
+  //   $route(to, from) {
+  //     console.log(to, from)
+  //     if (from.name === 'avater' && from.params.url) {
+  //       // 上传图片
+  //       let dataFrom = new FormData()
+  //       let blod = this.dataURLtoBlob(from.params.url)
+  //       let file = this.blobToFile(blod, 'avater')
+  //       dataFrom.append('file', file)
+  //       this.$api.sendUpImg(dataFrom).then(({ data }) => {
+  //         console.log('回传的图片', data)
+  //         this.changeAvater(data[0])
+  //       })
+  //     }
+  //   }
+  // },
   methods: {
+    ok(val) {
+      this.$router.go(-1)
+      let dataFrom = new FormData()
+      let blod = this.dataURLtoBlob(val)
+      let file = this.blobToFile(blod, 'avater')
+      dataFrom.append('file', file)
+      this.$api.sendUpImg(dataFrom).then(({ data }) => {
+        console.log('回传的图片', data)
+        this.changeAvater(data[0])
+      })
+    },
+    cancel() {
+      this.$router.go(-1)
+    },
+    //将base64转换为blob
+    dataURLtoBlob(dataurl) {
+      var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new Blob([u8arr], { type: mime })
+    },
+    //将blob转换为file
+    blobToFile(theBlob, fileName) {
+      theBlob.lastModifiedDate = new Date()
+      theBlob.name = fileName
+      return theBlob
+    },
+    afterRead(e) {
+      let reader = new FileReader()
+      let that = this
+      reader.onload = (function(file) {
+        return function(e) {
+          that.$router.push({
+            name: 'avater',
+            params: {
+              url: this.result
+            }
+          })
+          that.fileAvater = this.result
+        }
+      })(e.target.files[0])
+      reader.readAsDataURL(e.target.files[0])
+    },
+    getBase64(file) {
+      var reader = new FileReader()
+      let url
+      reader.onload = function(e) {
+        console.log(reader.result) //或者 e.target.result都是一样的，都是base64码
+        url = reader.result
+      }
+      reader.readAsDataURL(file)
+      return url
+    },
     ...mapMutations(['set_userInfo']),
     // 退出登录
     logOut() {
@@ -86,9 +168,26 @@ export default {
       }, 500)
     },
     // 修改头像
-    changeAvater() {
-      this.$router.push({
-        path: '/mypage/avater'
+    changeAvater(url) {
+      let obj = {
+        user_id: this.userInfo._id,
+        alter: {
+          avater: url
+        }
+      }
+      this.$toast.loading()
+      this.$api.sendAlterInfo(obj).then(({ msg }) => {
+        this.$api.sendUserInfo({ _id: this.userInfo._id }).then(({ data }) => {
+          this.$toast({
+            message: msg,
+            dispatch: 700,
+            onClose: () => {
+              this.showContent = false
+              this.set_userInfo(data)
+              this.alterValueEnd = ''
+            }
+          })
+        })
       })
     },
     // 修改内容

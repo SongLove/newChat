@@ -26,6 +26,7 @@ let router = new VueRouter({
       children: [
         {
           path:'/mypage/avater',
+          name: changeAvater.name,
           component: changeAvater,
           meta: { keepAlive: true }
         }

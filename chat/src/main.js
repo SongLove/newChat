@@ -16,9 +16,11 @@ import Filters from './utils/filter'
 import VueLazyload from 'vue-lazyload'
 import previe from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
+import VueClipper from 'vuejs-clipper'
 
 Vue.use(axios)
 Vue.use(components)
+Vue.use(VueClipper)
 Vue.use(previe)
 Vue.use(VueLazyload, {
   preLoad: 1.3,
